@@ -1,0 +1,21 @@
+<?php
+/** @var \CyberSource\SecureAcceptance\Block\Adminhtml\Transparent\Form\SaveForLater $block */
+$enabled = $block->isAdminVaultEnabled();
+?>
+
+<?php if ($enabled) : ?>
+    <div class="admin__field admin__field-option field-save_for_later">
+
+        <input type="checkbox" title="<?= $block->escapeHtml(__('Save for later use.')) ?>"
+               data-container="<?= /* @noEscape */ $block->getMethodCode() ?>-vault-enabled"
+               class="admin__control-checkbox"
+               id="<?= /* @noEscape */ $block->getMethodCode() ?>_save_for_later"
+               name="payment[vault_is_enabled]" value="1" autocomplete="off"/>
+        <label class="admin__field-label"
+               for="<?= /* @noEscape */
+               $block->getMethodCode() ?>_save_for_later"
+        >
+            <span><?= $block->escapeHtml(__('Save for later use.')) ?></span>
+        </label>
+    </div>
+<?php endif; ?>

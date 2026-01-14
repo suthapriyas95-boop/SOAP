@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2018 CyberSource. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="cybersource_quote_submit_success">
+        <observer name="sendEmail" instance="CyberSource\Core\Observer\SubmitObserver" />
+    </event>
+</config>

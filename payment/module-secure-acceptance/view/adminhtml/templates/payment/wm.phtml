@@ -1,0 +1,22 @@
+<?php
+$code = $block->escapeHtml($block->getMethodCode());
+
+?>
+
+<!--<div data-mage-init='{"CyberSource_SecureAcceptance/js/web-mobile": {}}'></div>-->
+
+<fieldset id="payment_form_<?= $block->escapeHtml($block->getMethodCode()) ?>"
+          style="display:none"
+          class="admin__fieldset payment-method"
+          data-mage-init='{"CyberSource_SecureAcceptance/js/web-mobile": {
+                "controller":"<?= $block->escapeHtml($block->getRequest()->getControllerName()) ?>",
+                "gateway":"<?= /* @noEscape */ $code ?>",
+                "orderSaveUrl":"<?= $block->escapeUrl($block->getOrderUrl()) ?>",
+                "cgiUrl":"<?= $block->escapeUrl($block->getCgiUrl()) ?>"}, "validation":[]}'>
+    <div class="admin__field">
+        <div class="admin__field-control control">
+            <?= $block->escapeHtml(__('We\'ll ask for payment details before placing an order.')) ?>
+        </div>
+    </div>
+    <?= $block->getChildHtml() ?>
+</fieldset>

@@ -1,0 +1,50 @@
+<?php /* @var $block \CyberSource\AccountUpdater\Block\Adminhtml\System\Config\Update */ ?>
+
+<?= $block->getDateWidgetHtml() ?>
+
+<?= $block->getButtonHtml() ?>
+
+<script>
+    require([
+        'jquery',
+        'Magento_Ui/js/modal/alert',
+        'Magento_Ui/js/modal/confirm'
+    ], function($, alert, confirm) {
+
+        function startUpdate() {
+            $.post('<?= /* noescape */ $block->getUpdateUrl() ?>',
+                {
+                    date: $('#au_update_date').val(),
+                    form_key: FORM_KEY
+                }
+            ).done(
+                function (response) {
+                    if (response.status) {
+                        alert({
+                            content: 'Updated: ' + response.data.updated + '<br />Deleted: ' + response.data.deleted +
+                            '<br />Skipped: ' + response.data.skipped + '<br />Failed: ' + response.data.failed +
+                            '<br /><br /> See var/log/cybs.au.log for details'
+                        });
+                    } else {
+                        alert({
+                            content: response.error
+                        });
+                    }
+                    $('#config-edit-form').trigger('processStop');
+                }
+            );
+        }
+
+        $('#au_update_button').click(function() {
+            confirm({
+                content: 'Are you sure you want to perform manual update?',
+                actions: {
+                    confirm: function () {
+                        $('#config-edit-form').trigger('processStart');
+                        startUpdate();
+                    }
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,13 @@
+<?php /* @var \Magento\Payment\Block\Transparent\Iframe $block */
+$params = $block->getParams();
+$agreements = $params['payload']['extension_attributes']['agreement_ids'] ?? []
+?>
+<?php if ($agreements) : ?>
+    <div class="payment-method _active">
+        <?php foreach ($agreements as $id) : ?>
+            <div data-role="checkout-agreements">
+                <input type="hidden" name="agreement[]" value="<?php /* @noEscape */ echo $id ?>">
+            </div>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>

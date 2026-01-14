@@ -1,0 +1,324 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2018 CyberSource. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+            <group id="cybersource_section" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                <group id="cybersource_secure_acceptance" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Credit Card</label>
+                    <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/chcybersource/active</config_path>
+                    </field>
+                    <field id="title" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="1">
+                        <label>Title</label>
+                        <validate>required-entry</validate>
+                        <config_path>payment/chcybersource/title</config_path>
+                        <depends><field id="active">1</field></depends>
+                    </field>
+                    <field id="sa_flow_mode" translate="label"  type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Payment API</label>
+                        <comment>NOTE: SOAP Toolkit API requires Token Management Service to be enabled for your Merchant Account in EBC.</comment>
+                        <source_model>CyberSource\Core\Model\Source\SecureAcceptance\FlowType</source_model>
+                        <config_path>payment/chcybersource/sa_flow_mode</config_path>
+                        <depends><field id="active">1</field></depends>
+                    </field>
+                    <field id="secureacceptance_type" translate="label"  type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Checkout Flow Type</label>
+                        <comment>NOTE: Flex Microform will use SOAP Toolkit API by default.</comment>
+                        <source_model>CyberSource\Core\Model\Source\SecureAcceptance\Type</source_model>
+                        <config_path>payment/chcybersource/secureacceptance_type</config_path>
+                        <depends><field id="active">1</field></depends>
+                    </field>
+                    <field id="csrf_token_expiration_lifetime" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>CSRF Token Expiration Time (Seconds)</label>
+                        <comment>For Checkout API Only! Minimum Recommendation: 300 seconds = 5 Minutes</comment>
+                        <validate>validate-number validate-digits validate-zero-or-greater</validate>
+                        <config_path>payment/chcybersource/csrf_token_expiration_lifetime</config_path>
+                        <depends><field id="active">1</field></depends>
+                    </field>
+                    <group id="secure_acceptance_settings" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Credit Card Settings</label>
+                        <depends><field id="active">1</field></depends>
+                        <field id="payment_action" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment Action</label>
+                            <source_model>CyberSource\SecureAcceptance\Model\Adminhtml\Source\PaymentAction</source_model>
+                            <config_path>payment/chcybersource/payment_action</config_path>
+                        </field>
+                        <field id="auth_indicator" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="1">
+                            <label>Auth Indicator</label>
+                            <comment>Flag that specifies the purpose of the authorization for Secure Acceptance API only!</comment>
+                            <source_model>CyberSource\Core\Model\Source\AuthIndicator</source_model>
+                            <config_path>payment/chcybersource/auth_indicator</config_path>
+                        </field>
+                        <field id="order_status" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>New Order Status</label>
+                            <source_model>Magento\Sales\Model\Config\Source\Order\Status\Processing</source_model>
+                            <config_path>payment/chcybersource/order_status</config_path>
+                        </field>
+                        <field id="ignore_avs" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="1">
+                            <label>Ignore AVS</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/chcybersource/ignore_avs</config_path>
+                        </field>
+                        <field id="ignore_cvn" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="1">
+                            <label>Ignore CVN</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/chcybersource/ignore_cvn</config_path>
+                        </field>
+                        <field id="token_skip_decision_manager" translate="label"  type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Skip Fraud Management for tokenization</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/chcybersource/token_skip_decision_manager</config_path>
+                            <depends>
+                                <field id="sa_flow_mode">1</field>
+                            </depends>
+                        </field>
+                        
+                        <field id="token_skip_auto_auth" translate="label"  type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                            <label>Skip Pre-Authorization Check for Tokenization</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/chcybersource/token_skip_auto_auth</config_path>
+                            <comment>Yes: Skip the pre-authorization check. No: Perform the pre-authorization check. Use the ReCaptcha module to protect your store from mass enumaration card testing attacks if using Checkout API!</comment>
+                        </field>
+                        <field id="token_pass_expiration_date" translate="label"  type="select" sortOrder="75" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Pass expiration date for tokenized card via SOAP</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/chcybersource/token_pass_expiration_date</config_path>
+                        </field>
+                        <field id="cctypes" translate="label" type="multiselect" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Credit Card Types</label>
+                            <comment>For Checkout API and Flex Microform only</comment>
+                            <source_model>CyberSource\Core\Model\Source\Cctype</source_model>
+                            <config_path>payment/chcybersource/cctypes</config_path>
+                        </field>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/chcybersource/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <config_path>payment/chcybersource/specificcountry</config_path>
+							<can_be_empty>1</can_be_empty>
+                            <depends><field id="allowspecific">1</field></depends>
+                        </field>
+                        <field id="locale" translate="label" type="select" sortOrder="110"  showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                            <label>Override Secure Acceptance locale</label>
+                            <source_model>CyberSource\SecureAcceptance\Model\Adminhtml\Source\Locale</source_model>
+                            <config_path>payment/chcybersource/locale</config_path>
+                            <comment>Leave the system default to use your store locale</comment>
+                        </field>
+                    </group>
+                    <group id="cybersource_sop" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Checkout API Profile</label>
+                        <depends>
+                            <field id="active">1</field>
+                            <field id="secureacceptance_type">silent</field>                            
+                        </depends>
+                        <field id="sop_profile_id" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Profile Id</label>
+                            <config_path>payment/chcybersource/sop_profile_id</config_path>
+                        </field>
+                        <field id="sop_access_key" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Access Key</label>
+                            <validate>no-whitespace</validate>
+                            <config_path>payment/chcybersource/sop_access_key</config_path>
+                        </field>
+                        <field id="sop_secret_key" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Secret Key</label>
+                            <validate>no-whitespace</validate>
+                            <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                            <config_path>payment/chcybersource/sop_secret_key</config_path>
+                        </field>
+                        <group id="cybersource_sop_pa_profile" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payer Authentication Profile</label>
+                            <comment>Use another Secure Acceptance Profile for Payer Authentication payments</comment>
+                            <field id="sop_auth_active" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Enabled</label>
+                                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                                <config_path>payment/chcybersource/sop_auth_active</config_path>
+                            </field>
+                            <field id="sop_auth_profile_id" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Profile Id</label>
+                                <config_path>payment/chcybersource/sop_auth_profile_id</config_path>
+                                <depends>
+                                    <field id="sop_auth_active">1</field>
+                                </depends>
+                            </field>
+                            <field id="sop_auth_access_key" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Access Key</label>
+                                <validate>no-whitespace</validate>
+                                <config_path>payment/chcybersource/sop_auth_access_key</config_path>
+                                <depends>
+                                    <field id="sop_auth_active">1</field>
+                                </depends>
+                            </field>
+                            <field id="sop_auth_secret_key" translate="label" type="obscure" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Secret Key</label>
+                                <validate>no-whitespace</validate>
+                                <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                                <config_path>payment/chcybersource/sop_auth_secret_key</config_path>
+                                <depends>
+                                    <field id="sop_auth_active">1</field>
+                                </depends>
+                            </field>
+                        </group>
+                    </group>
+                    <group id="cybersource" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Hosted Checkout Profile</label>
+                        <depends>
+                            <field id="active">1</field>
+                            <field id="secureacceptance_type">web</field>                         
+                        </depends>
+                        <field id="profile_id" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Profile Id</label>
+                            <config_path>payment/chcybersource/profile_id</config_path>
+                        </field>
+                        <field id="access_key" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Access Key</label>
+                            <validate>no-whitespace</validate>
+                            <config_path>payment/chcybersource/access_key</config_path>
+                        </field>
+                        <field id="secret_key" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Secret Key</label>
+                            <validate>no-whitespace</validate>
+                            <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                            <config_path>payment/chcybersource/secret_key</config_path>
+                        </field>
+                        <field id="use_iframe" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Use Iframe</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/chcybersource/use_iframe</config_path>
+                        </field>
+                        <field id="use_iframe_sandbox" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Enable Iframe "sandbox" Attribute</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/chcybersource/use_iframe_sandbox</config_path>
+                            <depends><field id="use_iframe">1</field></depends>
+                            <comment>Disable this if payer authentication is enabled for current Secure Acceptance Hosted Checkout profile</comment>
+                        </field>
+                        <group id="cybersource_pa_profile" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payer Authentication Profile</label>
+                            <comment>Use another Secure Acceptance Profile for Payer Authentication payments</comment>
+                            <field id="auth_active" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Enabled</label>
+                                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                                <config_path>payment/chcybersource/auth_active</config_path>
+                            </field>
+                            <field id="auth_profile_id" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Profile Id</label>
+                                <config_path>payment/chcybersource/auth_profile_id</config_path>
+                                <depends>
+                                    <field id="auth_active">1</field>
+                                </depends>
+                            </field>
+                            <field id="auth_access_key" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Access Key</label>
+                                <validate>no-whitespace</validate>
+                                <config_path>payment/chcybersource/auth_access_key</config_path>
+                                <depends>
+                                    <field id="auth_active">1</field>
+                                </depends>
+                            </field>
+                            <field id="auth_secret_key" translate="label" type="obscure" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Secret Key</label>
+                                <validate>no-whitespace</validate>
+                                <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                                <config_path>payment/chcybersource/auth_secret_key</config_path>
+                                <depends>
+                                    <field id="auth_active">1</field>
+                                </depends>
+                            </field>
+                        </group>
+                    </group>
+                    <group id="cybersource_vault" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Save Card for Later Service</label>
+                        <depends><field id="active">1</field></depends>
+                        <field id="chcybersource_cc_vault_active" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Enabled</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/chcybersource_cc_vault/active</config_path>
+                        </field>
+                        <field id="enable_admin_vault" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Save Card for Later for Admin orders</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/chcybersource_cc_vault/active_admin</config_path>
+                            <depends>
+                                <field id="chcybersource_cc_vault_active">1</field>
+                            </depends>
+                            <comment>Enables storing card details for orders placed in the admin area</comment>
+                        </field>
+                        <field id="chcybersource_cc_vault_title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Saved Card Section Title</label>
+                            <config_path>payment/chcybersource_cc_vault/title</config_path>
+                            <depends>
+                                <field id="chcybersource_cc_vault_active">1</field>
+                            </depends>
+                        </field>
+                        <field id="enable_cvv" translate="label" type="select" sortOrder="180" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Use CVV for Saved Credit Cards</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/chcybersource/enable_cvv</config_path>
+                            <depends>
+                                <field id="chcybersource_cc_vault_active">1</field>
+                            </depends>
+                        </field>
+                        <field id="enable_admin_cvv" translate="label" type="select" sortOrder="185" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Use CVV for Saved Credit Cards in Admin</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/chcybersource_cc_vault/enable_admin_cvv</config_path>
+                            <depends>
+                                <field id="chcybersource_cc_vault_active">1</field>
+                                <field id="enable_admin_vault">1</field>
+                            </depends>
+                        </field>
+                    </group>
+                    <group id="sca_sa" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Strong Customer Authentication</label>
+                        <comment>Enforce Strong Customer Authentication for Secure Acceptance API</comment>
+                        <depends>
+                            <field id="active">1</field>
+                            <field id="sa_flow_mode">0</field>                            
+                        </depends>
+                        <field id="enforce_sca_sa_on_save" translate="label" type="select" sortOrder="65" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Enforce Strong Customer Authentication when saving a card</label>
+                            <tooltip><![CDATA[If enabled, card holder will be 3DS challenged when saving a card]]></tooltip>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/chcybersource/enforce_sca_sa_on_save</config_path>
+                            
+                        </field>
+                        <field id="enforce_sca_sa_without_save" translate="label" type="select" sortOrder="65" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Enforce Strong Customer Authentication when card is not being saved</label>
+                            <tooltip><![CDATA[If enabled, card holder will be 3DS challenged]]></tooltip>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/chcybersource/enforce_sca_sa_without_save</config_path>
+                        </field>
+                    </group>
+
+                    <group id="sca_soap" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Strong Customer Authentication</label>
+                        <comment>Enforce Strong Customer Authentication for SOAP Toolkit API</comment>
+                        <depends>
+                            <field id="active">1</field>
+                            <field id="sa_flow_mode">1</field>                            
+                        </depends>
+                        <field id="enforce_sca_soap_on_save" translate="label" type="select" sortOrder="65" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Enforce Strong Customer Authentication when saving a card</label>
+                            <tooltip><![CDATA[If enabled, card holder will be 3DS challenged when saving a card]]></tooltip>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/chcybersource/enforce_sca_soap_on_save</config_path>
+                        </field>
+                    </group>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>

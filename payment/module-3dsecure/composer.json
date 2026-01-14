@@ -1,0 +1,22 @@
+{
+    "name": "cybersource/module-3dsecure",
+    "description": "Cybersource 3D Secure 2.0",
+    "require": {
+        "php": "~8.2.0||~8.3.0||~8.4.0",
+        "cybersource/module-core": ">=3.5.1",
+        "lcobucci/jwt": "~3.4.6|~4.0.4|~4.1.5|~4.3.0"
+    },
+    "type": "magento2-module",
+    "version": "4.1.0",
+    "license": [
+        "proprietary"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "CyberSource\\ThreeDSecure\\": ""
+        }
+    }
+}

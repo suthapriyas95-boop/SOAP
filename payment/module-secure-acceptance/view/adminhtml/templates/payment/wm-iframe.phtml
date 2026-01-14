@@ -1,0 +1,29 @@
+<?php
+$code = $block->escapeHtml($block->getMethodCode());
+
+?>
+
+<iframe id="<?= /* @noEscape */ $code ?>-transparent-iframe"
+        data-container="<?= /* @noEscape */ $code ?>-transparent-iframe"
+        allowtransparency="true"
+        frameborder="0"
+        name="iframeTransparent"
+        sandbox="allow-same-origin allow-scripts allow-forms allow-top-navigation"
+        style="display: none; width: 100%; min-height: 645px; background-color: transparent;" ></iframe>
+<div id="<?= /* @noEscape */ $code ?>-transparent-iframe-container"
+     style="min-height: 500px; margin: 30px 0"></div>
+<fieldset id="payment_form_<?= $block->escapeHtml($block->getMethodCode()) ?>"
+          style="display:none"
+          class="admin__fieldset payment-method"
+          data-mage-init='{"CyberSource_SecureAcceptance/js/web-mobile-iframe": {
+                "controller":"<?= $block->escapeHtml($block->getRequest()->getControllerName()) ?>",
+                "gateway":"<?= /* @noEscape */ $code ?>",
+                "orderSaveUrl":"<?= $block->escapeUrl($block->getOrderUrl()) ?>",
+                "cgiUrl":"<?= $block->escapeUrl($block->getCgiUrl()) ?>"}, "validation":[]}'>
+    <div class="admin__field">
+        <div class="admin__field-control control">
+            <?= $block->escapeHtml(__('We\'ll ask for payment details before placing an order.')) ?>
+        </div>
+    </div>
+    <?= $block->getChildHtml() ?>
+</fieldset>

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright © 2020 CyberSource. All rights reserved.
+  ~ See accompanying LICENSE.txt for applicable terms of use and license.
+  -->
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block name="wechatpay.qr.popup" class="CyberSource\WeChatPay\Block\Order\Info\Qr" template="CyberSource_WeChatPay::order/info/popup.phtml" />
+        </referenceContainer>
+        <referenceBlock name="sales.order.info.buttons">
+            <block name="order.buttons.wechatpay.qr" class="CyberSource\WeChatPay\Block\Order\Info\Qr" template="CyberSource_WeChatPay::order/info/buttons/qr.phtml" after="-" />
+        </referenceBlock>
+    </body>
+</page>

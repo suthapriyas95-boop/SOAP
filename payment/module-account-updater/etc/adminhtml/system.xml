@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+            <group id="cybersource_section">
+                <group id="cybersource_au" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Account Updater</label>
+                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/chcybersource/au_active</config_path>
+                    </field>
+                    <field id="merchant_id" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Merchant ID</label>
+                        <validate>required-entry</validate>
+                        <config_path>payment/chcybersource/au_merchant_id</config_path>
+                        <depends>
+                            <field id="active">1</field>
+                        </depends>
+                    </field>
+                    <field id="cron_expr" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Update Interval</label>
+                        <backend_model>CyberSource\AccountUpdater\Model\Config\Backend\Cron</backend_model>
+                        <frontend_model>CyberSource\AccountUpdater\Block\Adminhtml\System\Config\Cron</frontend_model>
+                        <config_path>payment/chcybersource/au_cron_expr</config_path>
+                        <depends>
+                            <field id="active">1</field>
+                        </depends>
+                    </field>
+                    <field id="manual_update" translate="label" type="button" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Manual Update</label>
+                        <comment>Choose AU report date to pull. Then click Update button to process.</comment>
+                        <frontend_model>CyberSource\AccountUpdater\Block\Adminhtml\System\Config\Update</frontend_model>
+                        <depends>
+                            <field id="active">1</field>
+                        </depends>
+                    </field>
+                    <field id="test_mode" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Test Mode</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/chcybersource/au_test_mode</config_path>
+                        <depends>
+                            <field id="active">1</field>
+                        </depends>
+                    </field>
+                    <field id="test_report_path" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Test Report Path</label>
+                        <config_path>payment/chcybersource/au_test_report_path</config_path>
+                        <comment>Path is relative to magento var folder. Leave empty to pull report from Cybersource.</comment>
+                        <depends>
+                            <field id="active">1</field>
+                            <field id="test_mode">1</field>
+                        </depends>
+                    </field>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>

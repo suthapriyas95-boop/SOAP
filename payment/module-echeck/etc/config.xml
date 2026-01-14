@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2018 CyberSource. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <payment>
+            <cybersourceecheck>
+                <debug>1</debug>
+                <active>0</active>
+                <model>CyberSourceECheckPaymentGatewayFacade</model>
+                <payment_action>authorize_capture</payment_action>
+                <title>Cybersource ECheck</title>
+                <merchant_password backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <currency>USD</currency>
+                <can_capture>1</can_capture>
+                <can_void>1</can_void>
+                <can_cancel>1</can_cancel>
+                <can_use_checkout>1</can_use_checkout>
+                <is_gateway>1</is_gateway>
+                <allowspecific>0</allowspecific>
+                <specificcountry>GB,US</specificcountry>
+                <sort_order>40</sort_order>
+                <service_url>https://ebc.cybersource.com/ebc</service_url>
+                <test_service_url>https://ebctest.cybersource.com/ebctest</test_service_url>
+                <test_event_type>Final NSF</test_event_type>
+                <report_check_period>7</report_check_period>
+                <agreement_required>1</agreement_required>
+            </cybersourceecheck>
+        </payment>
+    </default>
+</config>

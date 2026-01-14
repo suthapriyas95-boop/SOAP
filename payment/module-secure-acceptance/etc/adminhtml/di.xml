@@ -1,0 +1,218 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2018 CyberSource. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <!-- Authorize command legacy -->
+    <virtualType name="CyberSourceSAGatewayAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">CyberSource\SecureAcceptance\Gateway\Request\AuthorizationRequest</argument>
+            <argument name="handler" xsi:type="object">CyberSourceSAAuthorizationHandler</argument>
+            <argument name="transferFactory" xsi:type="object">CyberSource\SecureAcceptance\Gateway\Http\TransferFactory</argument>
+            <argument name="validator" xsi:type="object">CyberSource\SecureAcceptance\Gateway\Validator\ResponseCodeValidator</argument>
+            <argument name="client" xsi:type="object">CyberSource\SecureAcceptance\Gateway\Http\Client\SOAPClient</argument>
+            <argument name="errorMessageMapper" xsi:type="object">CyberSource\Core\Gateway\ErrorMapper\ConfigurableMapper</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Sale command legacy -->
+    <virtualType name="CyberSourceSASaleCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">CyberSourceSASaleRequest</argument>
+            <argument name="handler" xsi:type="object">CyberSourceSASaleHandler</argument>
+            <argument name="transferFactory" xsi:type="object">CyberSource\SecureAcceptance\Gateway\Http\TransferFactory</argument>
+            <argument name="validator" xsi:type="object">CyberSource\SecureAcceptance\Gateway\Validator\ResponseCodeValidator</argument>
+            <argument name="client" xsi:type="object">CyberSource\SecureAcceptance\Gateway\Http\Client\SOAPClient</argument>
+            <argument name="errorMessageMapper" xsi:type="object">CyberSource\Core\Gateway\ErrorMapper\ConfigurableMapper</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="CyberSource\SecureAcceptance\Block\Info">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item xsi:type="string" name="is_secure_mode">0</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Vault\Model\Ui\Adminhtml\TokensConfigProvider">
+        <arguments>
+            <argument name="tokenUiComponentProviders" xsi:type="array">
+                <item name="chcybersource" xsi:type="object">CyberSource\SecureAcceptance\Model\Ui\Adminhtml\TokenUiComponentProvider</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="CyberSource\SecureAcceptance\Gateway\Request\VaultAuthorizationRequest">
+        <arguments>
+            <argument name="isAdmin" xsi:type="boolean">true</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="CyberSourceSAGatewayFacade" type="Magento\Payment\Model\Method\Adapter">
+        <arguments>
+            <argument name="formBlockType"  xsi:type="string">CyberSource\SecureAcceptance\Block\Adminhtml\Transparent\Form</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="CyberSource\SecureAcceptance\Controller\Adminhtml\Transparent\RequestSilentData">
+        <arguments>
+            <argument name="sessionManager" xsi:type="object">Magento\Backend\Model\Session\Quote</argument>
+            <argument name="paymentMethod" xsi:type="object">CyberSourceSAGatewayFacade</argument>
+        </arguments>
+    </type>
+
+    <type name="CyberSource\SecureAcceptance\Controller\Adminhtml\Microform\FlexPlaceOrder">
+        <arguments>
+            <argument name="sessionManager" xsi:type="object">Magento\Checkout\Model\Session</argument>
+            <argument name="paymentMethod" xsi:type="object">CyberSourceSAGatewayFacade</argument>
+        </arguments>
+    </type>
+
+    <type name="CyberSource\SecureAcceptance\Controller\Adminhtml\Microform\TokenRequest">
+        <arguments>
+            <argument name="sessionManager" xsi:type="object">Magento\Backend\Model\Session\Quote</argument>
+            <argument name="paymentMethod" xsi:type="object">CyberSourceSAGatewayFacade</argument>
+        </arguments>
+    </type>
+
+    <type name="CyberSource\SecureAcceptance\Controller\Adminhtml\Transparent\Response">
+        <arguments>
+            <argument name="sessionManager" xsi:type="object">Magento\Backend\Model\Session\Quote</argument>
+        </arguments>
+    </type>
+
+    <type name="CyberSource\SecureAcceptance\Gateway\Config\PlaceOrderUrlHandler">
+        <arguments>
+            <argument name="isAdmin" xsi:type="boolean">true</argument>
+        </arguments>
+    </type>
+
+    <type name="CyberSource\SecureAcceptance\Helper\RequestDataBuilder">
+        <arguments>
+            <argument name="checkoutSession" xsi:type="object">Magento\Backend\Model\Session\Quote</argument>
+        </arguments>
+        <plugin name="ch-adminhtml-transparent-custom-url" type="CyberSource\SecureAcceptance\Plugin\Helper\RequestDataBuilderPlugin"/>
+    </type>
+
+    <type name="CyberSource\SecureAcceptance\Plugin\Helper\RequestDataBuilderPlugin">
+        <arguments>
+            <argument name="checkoutSession" xsi:type="object">Magento\Backend\Model\Session\Quote</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Vault\Model\Method\Vault">
+        <plugin name="vault_method_plugin" type="CyberSource\SecureAcceptance\Plugin\Model\Method\VaultPlugin"/>
+    </type>
+
+    <type name="CyberSource\SecureAcceptance\Observer\DataAssignObserver">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Backend\Model\Session\Quote</argument>
+        </arguments>
+    </type>
+
+    <type name="CyberSource\SecureAcceptance\Helper\Vault">
+        <arguments>
+            <argument name="checkoutSession" xsi:type="object">Magento\Backend\Model\Session\Quote\Proxy</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="CyberSourceSAGatewaySoapVaultAuthorizeCommand" type="CyberSourceSAGatewaySoapAuthorizeCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">CyberSourceSAGatewaySoapVaultAuthorizeRequestBuilder</argument>
+            <argument name="handler" xsi:type="object">CyberSourceSAGatewaySoapVaultAuthorizationHandler</argument>
+            <argument name="validator" xsi:type="object">CyberSourceSAGatewayAuthorizeValidator</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="CyberSourceSAGatewaySoapVaultAuthorizeRequestBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="merchantData" xsi:type="string">CyberSource\SecureAcceptance\Gateway\Request\Soap\MerchantDataBuilder</item>
+                <item name="paymentData" xsi:type="string">CyberSource\SecureAcceptance\Gateway\Request\Soap\PaymentDataBuilder</item>
+                <item name="addressData" xsi:type="string">CyberSource\SecureAcceptance\Gateway\Request\Soap\AddressDataBuilder</item>
+                <item name="itemsData" xsi:type="string">CyberSourceCoreGatewaySoapAuthorizeItemsDataBuilder</item>
+                <item name="ccAuthService" xsi:type="string">CyberSourceSAGatewayCcAuthServiceRequest</item>
+                <item name="mddBuilder" xsi:type="string">CyberSource\SecureAcceptance\Gateway\Request\Soap\DecisionManagerMddBuilder</item>
+                <item name="subscriptionData" xsi:type="string">CyberSource\SecureAcceptance\Gateway\Request\Soap\SubscriptionBuilder</item>
+                <item name="mitData" xsi:type="string">CyberSource\SecureAcceptance\Gateway\Request\Soap\MitDataBuilder</item>
+                <item name="cvnBuilder" xsi:type="string">CyberSourceSAGatewayCvnBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="CyberSourceSAGatewayCvnBuilder" type="CyberSource\SecureAcceptance\Gateway\Request\Soap\CvnBuilder">
+        <arguments>
+            <argument name="isAdmin" xsi:type="string">true</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="CyberSource\SecureAcceptance\Gateway\Config\CgiUrlHandler">
+        <arguments>
+            <argument name="isAdmin" xsi:type="boolean">true</argument>
+        </arguments>
+    </type>
+
+    <type name="CyberSource\SecureAcceptance\Gateway\Validator\Flex\MicroformResponseValidator">
+        <arguments>
+            <argument name="isAdminHtml" xsi:type="boolean">true</argument>
+        </arguments>
+    </type>
+
+    <type name="CyberSource\SecureAcceptance\Gateway\Validator\Flex\CcTypeValidator">
+        <arguments>
+            <argument name="isAdminHtml" xsi:type="boolean">true</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="CyberSourceSAGatewaySoapVaultAuthorizationHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="transactionDetails" xsi:type="string">CyberSourceSASoapAuthorizeTransactionDetailsHandler</item>
+                <item name="additionalInfo" xsi:type="string">CyberSource\SecureAcceptance\Gateway\Response\Soap\AdditionalInfoHandler</item>
+                <item name="dmDetails" xsi:type="string">CyberSource\SecureAcceptance\Gateway\Response\Soap\DecisionManagerHandler</item>
+                <item name="mitHandler" xsi:type="string">CyberSource\SecureAcceptance\Gateway\Response\Soap\MitDetailsHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="CyberSource\SecureAcceptance\Gateway\Request\Soap\DecisionManagerMddBuilder">
+        <arguments>
+            <argument name="checkoutSession" xsi:type="object">Magento\Backend\Model\Session\Quote</argument>
+        </arguments>
+    </type>
+
+    <type name="CyberSource\SecureAcceptance\Gateway\Command\LegacyStrategyCommand">
+        <arguments>
+            <argument name="isAdmin" xsi:type="boolean">true</argument>
+        </arguments>
+    </type>
+
+    <type name="CyberSource\Core\Plugin\PaymentTokenRepositoryPlugin">
+        <arguments>
+            <argument name="checkoutSession" xsi:type="object">Magento\Backend\Model\Session\Quote\Proxy</argument>
+        </arguments>
+    </type>
+
+    <type name="CyberSource\SecureAcceptance\Gateway\Response\Soap\CleanSessionHandler">
+        <arguments>
+            <argument name="sessionManager" xsi:type="object">Magento\Backend\Model\Session\Quote\Proxy</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Vault\Api\PaymentTokenRepositoryInterface">
+        <plugin name="dummy-sa-payment-token-repository-plugin" type="CyberSource\Core\Plugin\PaymentTokenRepositoryPlugin" />
+        <plugin name="cybersource-sa-payment-token-repository-plugin" type="CyberSource\Core\Plugin\PaymentTokenRepositoryPlugin" />
+    </type>
+
+    <type name="Magento\Store\Api\StoreResolverInterface">
+        <plugin sortOrder="1" name="cyberSourceSecureAcceptanceStoreResolverInterface" type="CyberSource\SecureAcceptance\Plugin\Store\Api\StoreResolverInterfacePlugin" disabled="true"/>
+    </type>
+
+    <preference for="CyberSource\SecureAcceptance\Gateway\Config\SaConfigProviderInterface" type="CyberSource\SecureAcceptance\Gateway\Config\SaConfigProviderNonPa"/>
+
+</config>

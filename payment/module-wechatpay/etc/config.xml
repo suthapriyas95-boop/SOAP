@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright © 2020 CyberSource. All rights reserved.
+  ~ See accompanying LICENSE.txt for applicable terms of use and license.
+  -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <payment>
+            <cybersourcewechatpay>
+                <active>0</active>
+                <model>CyberSourceWeChatPayGatewayFacade</model>
+                <title>Cybersource WeChat Pay</title>
+                <qr_expiration_time>3600</qr_expiration_time>
+                <popup_message_delay>3</popup_message_delay>
+                <check_status_frequency>5</check_status_frequency>
+                <max_status_requests>0</max_status_requests>
+                <wechat_success_url>wechat-success</wechat_success_url>
+                <payment_action>authorize_capture</payment_action>
+                <can_initialize>0</can_initialize>
+                <can_capture>1</can_capture>
+                <can_void>1</can_void>
+                <can_cancel>1</can_cancel>
+                <can_refund>1</can_refund>
+                <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_use_checkout>1</can_use_checkout>
+                <can_use_internal>0</can_use_internal>
+                <is_gateway>1</is_gateway>
+                <allowspecific>0</allowspecific>
+                <specificcountry>GB,US</specificcountry>
+                <currency>USD,CAD,EUR,GBP,CNY</currency>
+                <sort_order>70</sort_order>
+                <transaction_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+            </cybersourcewechatpay>
+        </payment>
+    </default>
+</config>

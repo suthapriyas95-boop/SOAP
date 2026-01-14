@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright © 2020 CyberSource. All rights reserved.
+  ~ See accompanying LICENSE.txt for applicable terms of use and license.
+  -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="standard">
+        <route id="cybersource_googlepay" frontName="cybersourcegooglepay">
+            <module name="CyberSource_GooglePay" />
+        </route>
+    </router>
+</config>

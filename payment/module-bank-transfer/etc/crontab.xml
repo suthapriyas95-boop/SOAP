@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="bank_transfer_status_check"> <!-- Doesn't need to be unique -->
+        <job name="cron_bank_transfer_status_check" instance="CyberSource\BankTransfer\Cron\Status" method="execute">
+            <schedule>* * * * *</schedule>
+        </job>
+    </group>
+</config>

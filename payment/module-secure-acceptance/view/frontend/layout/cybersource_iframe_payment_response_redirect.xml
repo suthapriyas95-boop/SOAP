@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="checkout" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Checkout\Block\Onepage" name="checkout_config" template="CyberSource_SecureAcceptance::checkout/checkout_config.phtml"/>
+            <block class="Magento\Checkout\Block\Onepage" name="checkout_messages" template="CyberSource_SecureAcceptance::checkout/messages.phtml"/>
+            <block class="Magento\Payment\Block\Transparent\Iframe" name="transparent_iframe" template="CyberSource_SecureAcceptance::transparent/iframe_redirect.phtml"/>
+            <block class="Magento\Payment\Block\Transparent\Iframe" name="transparent_agreements" template="CyberSource_SecureAcceptance::transparent/agreements.phtml"/>
+        </referenceContainer>
+    </body>
+</page>

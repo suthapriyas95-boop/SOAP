@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <referenceBlock name="vault.token.list">
+                <action method="setTemplate">
+                    <argument name="template" xsi:type="string">CyberSource_PayPal::customer/vault/token_list.phtml</argument>
+                </action>
+                <block class="CyberSource\PayPal\Block\Customer\VaultTokenRenderer" name="cybersource_paypal.token.renderer" template="CyberSource_PayPal::customer/vault/token.phtml"/>
+            </referenceBlock>
+        </referenceContainer>
+    </body>
+</page>

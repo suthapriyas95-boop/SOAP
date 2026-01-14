@@ -1,0 +1,27 @@
+//
+//  Common
+//  _____________________________________________
+
+
+& when (@media-common = true) {
+
+    .flex {
+        &.cc-number, &.cvv {
+            display: block;
+            .lib-form-element-input(@_type: input-text);
+            .lib-form-validation();
+        }
+
+        &.cvv {
+
+        }
+    }
+
+    .control._with-tooltip {
+        .flex.cvv {
+            .lib-css(margin-right, @indent__s);
+            width: calc(~'100% -' @checkout-tooltip-icon__font-size + @indent__s + @indent__xs);
+        }
+    }
+
+}

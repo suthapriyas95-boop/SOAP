@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <payment>
+            <chcybersource>
+                <au_active>0</au_active>
+                <au_cron_expr>0 19 22 * *</au_cron_expr>
+                <au_test_mode>1</au_test_mode>
+                <au_test_report_path>au/test.csv</au_test_report_path>
+                <au_password backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+            </chcybersource>
+        </payment>
+    </default>
+</config>

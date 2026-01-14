@@ -1,0 +1,59 @@
+<div data-bind="attr: {class: 'payment-method'}, css: {'_active': isActive()}">
+    <div class="payment-method-title field choice">
+        <input type="radio"
+               name="payment[method]"
+               class="radio"
+               data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
+        <label class="label" data-bind="attr: {'for': getCode()}">
+            <span data-bind="text: getTitle()"></span>
+        </label>
+    </div>
+    <div class="payment-method-content">
+        <!-- ko foreach: getRegion('messages') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
+        <div class="payment-method-billing-address">
+            <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+        <form method="POST" action="" id="cybersource-post-form"></form>
+
+        <form id="chcybersource_form" class="form" data-bind="" method="post" action="#">
+            <!-- ko if: (isSilentPost())-->
+                <!-- ko template: 'CyberSource_SecureAcceptance/payment/cc-form' --><!-- /ko -->
+            <!-- /ko -->
+            <!-- ko if: (isVaultEnabled())-->
+                <div class="field choice">
+                    <input type="checkbox"
+                           name="vault[is_enabled]"
+                           class="checkbox"
+                           data-bind="attr: {'id': getCode() + '_enable_vault'}, checked: vaultEnabler.isActivePaymentTokenEnabler"/>
+                    <label class="label" data-bind="attr: {'for': getCode() + '_enable_vault'}">
+                        <span><!-- ko i18n: 'Save for later use.'--><!-- /ko --></span>
+                    </label>
+                </div>
+            <!-- /ko -->
+
+            <input type="submit" id="chcybersource_submit"  style="display:none" />
+        </form>
+        <div class="checkout-agreements-block">
+            <!-- ko foreach: $parent.getRegion('before-place-order') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button class="action primary checkout"
+                        type="submit"
+                        data-bind="
+                        click: placeOrderToCyberSource,
+                        css: {disabled: !isPlaceOrderActionAllowed()},
+                        attr: {title: $t('Place Order')}
+                ">
+                    <span data-bind="i18n: 'Place Order'"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

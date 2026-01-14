@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright © 2021 CyberSource. All rights reserved.
+  ~ See accompanying LICENSE.txt for applicable terms of use and license.
+  -->
+<csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp:etc/csp_whitelist.xsd">
+    <policies>
+        <policy id="script-src">
+            <values>
+                <value id="cybersource_microform_sandbox" type="host">testflex.cybersource.com</value>
+                <value id="cybersource_microform" type="host">flex.cybersource.com</value>
+            </values>
+        </policy>
+        <policy id="form-action">
+            <values>
+                <value id="cybersource_sa_test" type="host">testsecureacceptance.cybersource.com</value>
+                <value id="cybersource_sa" type="host">secureacceptance.cybersource.com</value>
+            </values>
+        </policy>
+        <policy id="frame-src">
+            <values>
+                <value id="cybersource_microform_sandbox" type="host">testflex.cybersource.com</value>
+                <value id="cybersource_microform" type="host">flex.cybersource.com</value>
+                <value id="cybersource_sa_test" type="host">testsecureacceptance.cybersource.com</value>
+                <value id="cybersource_sa" type="host">secureacceptance.cybersource.com</value>
+            </values>
+        </policy>
+    </policies>
+</csp_whitelist>

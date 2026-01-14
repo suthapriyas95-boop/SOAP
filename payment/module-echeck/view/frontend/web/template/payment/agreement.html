@@ -1,0 +1,32 @@
+<div class="checkout-agreements echeck-agreement-block field control required"
+     data-bind="attr: {id: 'echeck_agreement'}">
+    <input type="checkbox"
+           name="payment[echeck_agreement]"
+           data-bind="attr: {id: 'echeck_agreement_checkbox',
+                            'data-container': 'echeck_agreement',
+                            'data-validate': JSON.stringify({'required-entry': isAgreementRequired()})}"/>
+    <label data-bind="attr: {for: 'echeck_agreement_checkbox'}" class="label">
+        <button type="button"
+                class="action action-show"
+                data-bind="click: function(data, event) { return showContent(data, event) }">
+            <span><!-- ko i18n: 'I agree with electronic check processing terms'--><!-- /ko --></span>
+        </button>
+    </label>
+    <div id="echeck-agreements-modal" data-bind="afterRender: initModal" style="display: none">
+        <div class="echeck-agreements-item-content">
+            Today, being <!-- ko text: getDate()--><!-- /ko -->, I, <!-- ko text: customerName--><!-- /ko -->, by
+            entering my routing and account number above and clicking “Authorize,” I authorize my payment in the amount
+            indicated above to be processed as an electronic funds transfer (EFT) or draft drawn from my checking or
+            savings account as indicated above and, if necessary, to have my account electronically credited to correct
+            erroneous debits. I understand that my payment will be processed within 1-2 banking days. If the payment
+            returns unpaid, I authorize you or your service provider to collect the payment and my state’s return item
+            fee and, if applicable, costs, by EFT(s) or draft(s) drawn from my account. <a
+                href="http://www.achex.com/html/NSF_pop.jsp" target="_blank" rel="noopener noreferrer">Click here to view your state’s returned
+            item fee and, if applicable, costs</a>. I understand that this authorization will remain in full force and
+            effect until I notify you that I wish to revoke it by calling <!-- ko text: getStorePhone()--><!-- /ko -->
+            and allow you reasonable opportunity to act on my notice. PLEASE PRINT A COPY OF THIS PAGE FOR YOUR RECORDS.
+            ALTERNATIVELY, CONTACT US AT <!-- ko text: getStorePhone()--><!-- /ko --> TO LEARN HOW YOU CAN OBTAIN A
+            COPY.
+        </div>
+    </div>
+</div>

@@ -1,0 +1,147 @@
+<!--
+/**
+ * Copyright © 2018 CyberSource. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<div class="payment-method" data-bind="css: {'_active': isActive()}">
+    <div class="payment-method-title field choice">
+        <input type="radio"
+               name="payment[method]"
+               class="radio"
+               data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
+        <label class="label" data-bind="attr: {'for': getCode()}">
+            <span data-bind="text: getTitle()"></span>
+        </label>
+    </div>
+
+    <div class="payment-method-content">
+        <!-- ko foreach: getRegion('messages') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
+        <div class="payment-method-billing-address">
+            <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+
+        <form class="form" data-bind="attr: {id: getCode() + '-form'}" method="post" action="#">
+            <div class="field required" data-bind="attr: {id: getCode() + '_check_bank_transit_number_container'}">
+                <label data-bind="attr: {for: getCode() + '_check_bank_transit_number'}" class="label">
+                    <span><!-- ko i18n: 'Routing Number'--><!-- /ko --></span>
+                </label>
+                <div class="control _with-tooltip">
+                    <input type="number"
+                           autocomplete="off"
+                           class="input-text validate-digits validate-length maximum-length-9 minimum-length-9"
+                           name="payment[check_bank_transit_number]"
+                           value=""
+                           data-bind="attr: {id: getCode() + '_check_bank_transit_number',
+                            title: $t('Routing Number'),
+                            'data-container': getCode() + '-check_bank_transit_number_container',
+                            'data-validate': JSON.stringify({'required-number':true})},
+                            enable: isActive($parents),
+                            value: checkBankTransitNumber" />
+                    <div class="field-tooltip toggle">
+                    <span class="field-tooltip-action action-cvv"
+                          tabindex="0"
+                          data-toggle="dropdown"
+                          data-bind="attr: {title: $t('What is this?')}, mageInit: {'dropdown':{'activeClass': '_active'}}">
+                        <span><!-- ko i18n: 'What is this?'--><!-- /ko --></span>
+                    </span>
+                        <div class="field-tooltip-content"
+                             data-target="dropdown"
+                             data-bind="html: getECheckImageHtml()"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field required" data-bind="attr: {id: getCode() + '_check_account_number_container'}">
+                <label data-bind="attr: {for: getCode() + '_check_account_number'}" class="label">
+                    <span><!-- ko i18n: 'Account Number'--><!-- /ko --></span>
+                </label>
+                <div class="control _with-tooltip">
+                    <input type="number"
+                           autocomplete="off"
+                           class="input-text validate-digits validate-length maximum-length-17 minimum-length-4"
+                           name="payment[check_account_number]"
+                           value=""
+                           data-bind="attr: {id: getCode() + '_check_account_number',
+                            title: $t('Routing Number'),
+                            'data-container': getCode() + '-check_account_number_container',
+                            'data-validate': JSON.stringify({'required-number':true})},
+                            enable: isActive($parents),
+                            value: checkAccountNumber" />
+                </div>
+            </div>
+
+            <!-- ko if: (isCheckNumberRequired()) -->
+            <div class="field required" data-bind="attr: {id: getCode() + '_check_number_container'}">
+                <label data-bind="attr: {for: getCode() + '_check_number'}" class="label">
+                    <span><!-- ko i18n: 'Check Number'--><!-- /ko --></span>
+                </label>
+                <div class="control _with-tooltip">
+                    <input type="number"
+                           autocomplete="off"
+                           class="input-text validate-length maximum-length-8"
+                           name="payment[check_number]"
+                           value=""
+                           data-bind="attr: {id: getCode() + '_check_number',
+                            title: $t('Routing Number'),
+                            'data-container': getCode() + '-_check_number_container',
+                            'data-validate': JSON.stringify({'required-number':true})},
+                            enable: isActive($parents),
+                            value: checkNumber" />
+                </div>
+            </div>
+            <!--/ko-->
+
+            <!-- ko if: (isDriversLicenseNumberRequired()) -->
+            <div class="field required" data-bind="attr: {id: getCode() + '_drivers_license_number_container'}">
+                <label data-bind="attr: {for: getCode() + '_drivers_license_number'}" class="label">
+                    <span><!-- ko i18n: 'Drivers License Number'--><!-- /ko --></span>
+                </label>
+                <div class="control _with-tooltip">
+                    <input type="number"
+                           autocomplete="off"
+                           class="input-text validate-length maximum-length-30"
+                           name="payment[drivers_license_number]"
+                           value=""
+                           data-bind="attr: {id: getCode() + '_drivers_license_number',
+                            title: $t('Routing Number'),
+                            'data-container': getCode() + '-_drivers_license_number_container',
+                            'data-validate': JSON.stringify({'required-number':true})},
+                            enable: isActive($parents),
+                            value: driversLicenseNumber" />
+                </div>
+            </div>
+
+            <div data-bind="scope: 'checkout.steps.billing-step.payment.renders.cybersourceecheck.cybersourceecheck-drivers-license-fieldset'">
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            </div>
+            <!--/ko-->
+
+            <div class="checkout-agreements-block">
+                <div data-bind="scope: 'checkout.steps.billing-step.payment.renders.cybersourceecheck.cybersourceecheck-agreement'">
+                    <!-- ko template: getTemplate() --><!-- /ko -->
+                </div>
+                <!-- ko foreach: $parent.getRegion('before-place-order') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+                <!--/ko-->
+            </div>
+        </form>
+        <br/>
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button class="action primary checkout"
+                        type="submit"
+                        data-bind="
+                        click: placeOrder,
+                        attr: {title: $t('Place Order')}
+                        ">
+                    <span data-bind="i18n: 'Place Order'"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

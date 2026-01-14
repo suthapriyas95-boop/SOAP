@@ -1,0 +1,26 @@
+<?php
+/**
+ * Copyright © 2020 CyberSource. All rights reserved.
+ * See accompanying LICENSE.txt for applicable terms of use and license.
+ */
+
+?>
+<?php
+/* @var $block \CyberSource\GooglePay\Block\Button */
+
+$labelPosition = '';
+if ($block->isOrPositionBefore()) {
+    $labelPosition = ' before';
+} elseif ($block->isOrPositionAfter()) {
+    $labelPosition = ' after';
+}
+$shortcutHtmlId = $block->escapeHtml($block->getShortcutHtmlId());
+?>
+<div
+        data-label="<?= /* @noEscape */ $block->escapeHtml(__('or')) ?>"
+        class="checkout googlepay-button-container <?= /* @noEscape */ $labelPosition ?>"
+        data-mage-init='{"CyberSource_GooglePay/js/view/payment/shortcut": <?= /* @noEscape */ $block->getJsonConfig() ?>}'
+        <?= /* @noEscape */ $block->getIsInCatalogProduct() ? '' : 'style="text-align: center; margin-top: 15px;"' ?>
+>
+    <div id="<?= /* @noEscape */ $shortcutHtmlId ?>"></div>
+</div>

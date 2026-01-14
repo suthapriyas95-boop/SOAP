@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <virtualType name="CyberSourceThreeDSecureCommandManager" type="Magento\Payment\Gateway\Command\CommandManager">
+        <arguments>
+            <argument name="commandPool" xsi:type="object">CyberSourceThreeDSecureCommandPool</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="CyberSourceThreeDSecureCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="payerauthSetup" xsi:type="string">CyberSource\ThreeDSecure\Gateway\Command\Cca\PayerAuthSetUpBuilderCommand</item> 
+            </argument>
+        </arguments>
+    </virtualType>
+
+     <type name="CyberSource\ThreeDSecure\Gateway\Command\Cca\PayerAuthSetUpBuilderCommand">
+        <arguments>
+             <argument name="requestBuilder" xsi:type="object">CyberSourceThreeDSecurePayerAuthSetupRequestBuilder</argument>
+             <argument name="subscriptionRetrieveCommand" xsi:type="object">CyberSource\SecureAcceptance\Gateway\Command\RetrieveSubscriptionCommand</argument>
+             <argument name="transferFactory" xsi:type="object">CyberSource\SecureAcceptance\Gateway\Http\TransferFactory</argument>
+             <argument name="client" xsi:type="object">CyberSource\SecureAcceptance\Gateway\Http\Client\SOAPClient</argument>
+        </arguments>
+    </type>
+
+    <type name="CyberSource\SecureAcceptance\Gateway\Http\Client\SOAPClient">
+        <plugin name="transparent_data_plugin" type="CyberSource\SecureAcceptance\Gateway\Http\Client\TransparentResponsePlugin"/>
+    </type>
+
+     <virtualType name="CyberSourceThreeDSecurePayerAuthSetupRequestBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+				<item name="requestBuilder" xsi:type="string">CyberSource\ThreeDSecure\Gateway\Request\Cca\PayerAuthSetupRequestBuilder</item>    
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="CyberSource\ThreeDSecure\Controller\Cca\RequestToken">
+        <arguments>
+            <argument name="sessionManager" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
+            <argument name="commandManager" xsi:type="object">CyberSourceThreeDSecureCommandManager</argument>
+        </arguments>
+    </type>
+    
+    <virtualType name="CyberSourceSAGatewaySoapAuthorizeRequestBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="paService" xsi:type="string">CyberSource\ThreeDSecure\Gateway\Request\Cca\BuilderStrategy</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="CyberSourceSAGatewayAuthorizeValidator" type="Magento\Payment\Gateway\Validator\ValidatorComposite">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="3dsResponseValidator" xsi:type="string">CyberSource\ThreeDSecure\Gateway\Validator\PaEnrolledValidator</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="CyberSource\ThreeDSecure\Gateway\Validator\PaEnrolledValidator">
+        <arguments>
+            <argument name="builder" xsi:type="object">CyberSource\ThreeDSecure\Gateway\Request\Cca\TokenDataBuilder</argument>
+        </arguments>
+    </type>
+
+    <type name="CyberSource\ThreeDSecure\Gateway\Request\Cca\PayerAuthValidateBuilder">
+        <arguments>
+            <argument name="commandPool" xsi:type="object">CyberSourceThreeDSecureCommandPool</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Vault\Observer\PaymentTokenAssigner">
+        <plugin name="cybersource-3ds-vaule-assigner-plugin" type="CyberSource\ThreeDSecure\Model\Vault\Observer\PaymentTokenAssignerPlugin"/>
+    </type>
+
+    <type name="Magento\Framework\Webapi\ErrorProcessor">
+        <plugin name="cybersource_webapi_error_processor" type="CyberSource\ThreeDSecure\Webapi\Error\ProcessorPlugin"
+                sortOrder="1"/>
+    </type>
+
+    <type name="Magento\Quote\Model\Quote\Payment\ToOrderPayment">
+        <plugin name="cybersource_convert_cca" type="CyberSource\ThreeDSecure\Model\Quote\Payment\ToOrderPaymentPlugin"/>
+    </type>
+
+    <type name="Magento\Checkout\Api\GuestPaymentInformationManagementInterface">
+        <plugin
+                name="cybersource_save_quote_guest_checkout"
+                type="CyberSource\ThreeDSecure\Plugin\Checkout\Model\GuestPaymentInformationManagementInterfacePlugin"
+        />
+    </type>
+
+    <type name="CyberSource\SecureAcceptance\Controller\SecureAcceptance\TokenProcess">
+        <plugin name="cybersource_3ds_token_process_plugin" type="CyberSource\ThreeDSecure\Plugin\SecureAcceptance\Controller\TokenProcessPlugin" />
+    </type>
+
+    <type name="CyberSource\Core\Plugin\MinificationPlugin">
+        <arguments>
+            <argument name="additionalExcludes" xsi:type="array">
+                <item name="cybersource-cardinal-stg" xsi:type="string">centinelapistag.cardinalcommerce.com</item>
+                <item name="cybersource-cardinal-prod" xsi:type="string">centinelapi.cardinalcommerce.com</item>
+            </argument>
+        </arguments>
+    </type>
+
+</config>

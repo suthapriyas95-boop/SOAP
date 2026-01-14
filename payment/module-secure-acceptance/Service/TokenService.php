@@ -1,0 +1,98 @@
+<?php
+
+namespace CyberSource\SecureAcceptance\Service;
+
+use Magento\Payment\Gateway\Command\CommandManagerInterface;
+use Magento\Framework\Url\DecoderInterface;
+use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Quote\Model\QuoteRepository;
+use CyberSource\Core\Model\LoggerInterface;
+use CyberSource\SecureAcceptance\Gateway\Config\Config;
+use Magento\Framework\Message\ManagerInterface as ManagerInterface;
+
+class TokenService
+{
+    const COMMAND_CODE = 'generate_flex_key';
+
+    private $commandManager;
+    private $urlDecoder;
+    private $checkoutSession;
+    private $quoteRepository;
+    private $logger;
+    private $config;
+    private $messageManager;
+
+    public function __construct(
+        CommandManagerInterface $commandManager,
+        DecoderInterface $urlDecoder,
+        CheckoutSession $checkoutSession,
+        QuoteRepository $quoteRepository,
+        LoggerInterface $logger,
+        Config $config,
+        ManagerInterface $messageManager
+    ) {
+        $this->commandManager   = $commandManager;
+        $this->urlDecoder       = $urlDecoder;
+        $this->checkoutSession  = $checkoutSession;
+        $this->quoteRepository  = $quoteRepository;
+        $this->logger           = $logger;
+        $this->config           = $config;
+        $this->messageManager   = $messageManager;
+    }
+
+    public function generateToken()
+    {
+        $quote = $this->checkoutSession->getQuote();
+
+        if (!$quote || !$quote->getId()) {
+            $this->logger->warning('Cart is empty or unable to load cart data.');
+            return; // Exit if the cart is empty or the quote is invalid
+        }
+
+        if ($this->config->isMicroform()) {
+            $commandResult = $this->commandManager->executeByCode(
+                self::COMMAND_CODE,
+                $quote->getPayment()
+            );
+
+            // Check if $commandResult is an object and has a get() method.
+            if (is_object($commandResult) && method_exists($commandResult, 'get')) {
+                $commandData = $commandResult->get();
+            } else {
+                $commandData = $commandResult;
+            }
+            $this->quoteRepository->save($quote);
+
+            // Ensure the expected 'response' key exists
+            if (!isset($commandData['response'])) {
+                return ['error' => __('Invalid response from token generation.')];
+            }
+
+            $captureContextValue = $commandData['response'];
+
+            // Decode the capture context value safely
+            $decodedCaptureResponse = json_decode($this->urlDecoder->decode(explode('.', $captureContextValue)[1]));
+            $ctxData = $decodedCaptureResponse->ctx[0]->data ?? null;
+
+            if ($ctxData) {
+                $quoteExtension = $quote->getExtensionAttributes();
+                if (!$quoteExtension) {
+                    $quoteExtension = $this->quoteRepository->create();
+                }
+                // Set clientLibraryIntegrity if not already set
+                if (!$quoteExtension->getClientLibraryIntegrity()) {
+                    $quoteExtension->setClientLibraryIntegrity($ctxData->clientLibraryIntegrity ?? null);
+                }
+                // Set clientLibrary if not already set
+                if (!$quoteExtension->getClientLibrary()) {
+                    $quoteExtension->setClientLibrary($ctxData->clientLibrary ?? null);
+                }
+
+                $quote->setExtensionAttributes($quoteExtension);
+                $this->quoteRepository->save($quote);
+            }
+        } else {
+            return true;
+        }
+    }
+}

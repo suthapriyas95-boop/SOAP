@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <payment>
+            <cybersourceklarna>
+                <active>0</active>
+                <model>CyberSourceKlarnaPaymentGatewayFacade</model>
+                <title>Cybersource Klarna</title>
+                <payment_action>authorize</payment_action>
+                <can_authorize>1</can_authorize>
+                <can_capture>1</can_capture>
+                <can_void>1</can_void>
+                <can_cancel>1</can_cancel>
+                <can_refund>1</can_refund>
+                <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_use_checkout>1</can_use_checkout>
+                <can_use_internal>0</can_use_internal>
+                <is_gateway>1</is_gateway>
+                <sort_order>40</sort_order>
+                <allowspecific>0</allowspecific>
+                <specificcountry>AT,DK,FI,DE,NL,NO,SE,GB,US</specificcountry>
+                <can_capture_partial>1</can_capture_partial>
+				<transaction_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+            </cybersourceklarna>
+        </payment>
+    </default>
+</config>

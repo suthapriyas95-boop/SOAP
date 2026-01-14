@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="CyberSource\Atp\Model\Config">
+        <arguments>
+            <argument name="pathPattern" xsi:type="const">Magento\Payment\Gateway\Config\Config::DEFAULT_PATH_PATTERN</argument>
+            <argument name="methodCode" xsi:type="const">CyberSource\Core\Model\Config::CODE</argument>
+        </arguments>
+    </type>
+
+    <!-- DME plugins -->
+    <type name="Magento\Customer\Model\ResourceModel\CustomerRepository">
+        <plugin name="cybersource-customer-repository-plugin"
+                type="CyberSource\Atp\Plugin\CustomerRepositoryPlugin" />
+    </type>
+    <type name="Magento\Customer\Model\ResourceModel\AddressRepository">
+        <plugin name="cybersource-address-repository-plugin"
+                type="CyberSource\Atp\Plugin\AddressRepositoryPlugin" />
+    </type>
+    <type name="Magento\Customer\Model\Session">
+        <plugin name="cybersource-customer-session-plugin"
+                type="CyberSource\Atp\Plugin\CustomerSessionPlugin" />
+    </type>
+    <type name="Magento\Quote\Model\QuoteManagement">
+        <plugin name="cybersource-quote-management-plugin"
+                type="CyberSource\Atp\Plugin\QuoteManagementPlugin" />
+    </type>
+</config>

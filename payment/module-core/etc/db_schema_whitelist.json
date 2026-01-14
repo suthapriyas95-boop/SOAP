@@ -1,0 +1,30 @@
+{
+    "cybersource_payment_token": {
+        "column": {
+            "token_id": true,
+            "created_date": true,
+            "customer_id": true,
+            "order_id": true,
+            "quote_id": true,
+            "payment_token": true,
+            "customer_email": true,
+            "store_id": true,
+            "card_default": true,
+            "card_expire": true,
+            "card_type": true,
+            "cc_last4": true,
+            "payment_type": true,
+            "updated_date": true,
+            "card_expiry_date": true,
+            "address_id": true,
+            "reference_number": true,
+            "authorize_only": true,
+            "transaction_id": true,
+            "cc_number": true,
+            "payment_method": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

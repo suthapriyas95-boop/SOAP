@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <payment>
+            <chcybersource>
+                <atp_active>0</atp_active>
+                <atp_internal_resolution>1</atp_internal_resolution>
+                <atp_rejection_title>We're sorry</atp_rejection_title>
+                <atp_rejection_message>You cannot take this action at this time.</atp_rejection_message>
+                <atp_action_on_error>REJECT</atp_action_on_error>
+            </chcybersource>
+        </payment>
+    </default>
+</config>

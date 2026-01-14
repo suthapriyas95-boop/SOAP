@@ -1,0 +1,17 @@
+<div id="checkout" data-bind="scope:'checkoutMessages'">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+    <script type="text/x-magento-init">
+        {
+            "#checkout": {
+                "Magento_Ui/js/core/app": {
+                   "components": {
+                        "checkoutMessages": {
+                            "component": "Magento_Ui/js/view/messages",
+                            "displayArea": "messages"
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</div>

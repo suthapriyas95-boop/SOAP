@@ -1,0 +1,15 @@
+.input-text-container{
+  transform: translateX(-30px);
+}
+
+.flex-input{
+  height:35px;
+}
+
+.input-select-container{
+  margin-bottom:20px;
+}
+
+#microform-error, #microform-cvn-error{
+  transform: translateX(30px);
+}

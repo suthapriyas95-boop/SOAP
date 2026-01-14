@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <container name="flex">
+            <block
+                    class="CyberSource\SecureAcceptance\Block\Adminhtml\Microform\Flex"
+                    name="flex-microform-requirejs-config"
+                    template="CyberSource_SecureAcceptance::flexjs.phtml"
+            />
+        </container>
+        <referenceBlock name="order.create.billing.method.form">
+            <action method="setMethodFormTemplate">
+                <argument name="method" xsi:type="string">chcybersource_cc_vault</argument>
+                <argument name="template" xsi:type="helper" helper="CyberSource\SecureAcceptance\Helper\MethodForm::getCCVaultTemplateName"/>
+            </action>
+            <action method="setMethodFormTemplate">
+                <argument name="method" xsi:type="string">chcybersource</argument>
+                <argument name="template" xsi:type="helper" helper="CyberSource\SecureAcceptance\Helper\MethodForm::getCCTemplateName"/>
+            </action>
+        </referenceBlock>
+    </body>
+</page>

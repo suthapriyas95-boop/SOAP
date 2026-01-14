@@ -1,0 +1,178 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Payment Method Facade configuration -->
+    <virtualType name="CyberSourceApplePayFacade" type="Magento\Payment\Model\Method\Adapter">
+        <arguments>
+            <argument name="code" xsi:type="const">CyberSource\ApplePay\Model\Ui\ConfigProvider::APPLEPAY_CODE</argument>
+            <argument name="formBlockType" xsi:type="string">CyberSource\ApplePay\Block\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">CyberSource\ApplePay\Block\Info</argument>
+            <argument name="valueHandlerPool" xsi:type="object">CyberSourceApplePayValueHandlerPool</argument>
+            <argument name="commandPool" xsi:type="object">CyberSourceApplePayCommandPool</argument>
+        </arguments>
+    </virtualType>
+    <!-- Configuration reader -->
+    <type name="CyberSource\ApplePay\Gateway\Config\Config">
+        <arguments>
+            <argument name="pathPattern" xsi:type="const">Magento\Payment\Gateway\Config\Config::DEFAULT_PATH_PATTERN</argument>
+            <argument name="methodCode" xsi:type="const">CyberSource\ApplePay\Model\Ui\ConfigProvider::APPLEPAY_CODE</argument>
+        </arguments>
+    </type>
+    <!-- Commands infrastructure -->
+    <virtualType name="CyberSourceApplePayCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="authorize" xsi:type="string">CyberSourceApplePayAuthorizeCommand</item>
+                <item name="capture" xsi:type="string">CyberSourceApplePayCaptureStrategyCommand</item>
+                <item name="settlement" xsi:type="string">CyberSourceApplePayPaymentGatewayCaptureCommand</item>
+                <item name="sale" xsi:type="string">CyberSourceApplePaySaleCommand</item>
+                <item name="void" xsi:type="string">CyberSourceApplePayPaymentGatewayVoidCommand</item>
+                <item name="cancel" xsi:type="string">CyberSourceApplePayPaymentGatewayVoidCommand</item>
+                <item name="refund" xsi:type="string">CyberSourceApplePayPaymentGatewayRefundCommand</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="CyberSourceApplePayCaptureStrategyCommand" type="CyberSource\ApplePay\Gateway\Command\CaptureStrategyCommand">
+        <arguments>
+            <argument name="commandPool" xsi:type="object">CyberSourceApplePayCommandPool</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Authorize command -->
+    <virtualType name="CyberSourceApplePayAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">CyberSource\ApplePay\Gateway\Request\AuthorizeRequest</argument>
+            <argument name="handler" xsi:type="object">CyberSource\ApplePay\Gateway\Response\AuthorizeResponseHandler</argument>
+            <argument name="transferFactory" xsi:type="object">CyberSource\ApplePay\Gateway\Http\TransferFactory</argument>
+            <argument name="validator" xsi:type="object">CyberSource\ApplePay\Gateway\Validator\ResponseCodeValidator</argument>
+            <argument name="client" xsi:type="object">CyberSource\ApplePay\Gateway\Http\Client\SOAPClient</argument>
+            <argument name="errorMessageMapper" xsi:type="object">CyberSource\Core\Gateway\ErrorMapper\ConfigurableMapper</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Authorization Request -->
+    <type name="CyberSource\ApplePay\Gateway\Request\AuthorizeRequest">
+        <arguments>
+            <argument name="config" xsi:type="object">CyberSource\ApplePay\Gateway\Config\Config</argument>
+            <argument name="requestDataBuilder" xsi:type="object">CyberSourceApplePayHelperAuthorizeRequestDataBuilder</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="CyberSourceApplePayHelperAuthorizeRequestDataBuilder" type="CyberSource\ApplePay\Helper\RequestDataBuilder">
+        <arguments>
+            <argument name="orderItemsBuilder" xsi:type="object">CyberSourceCoreGatewaySoapAuthorizeItemsDataBuilder</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Capture command -->
+    <virtualType name="CyberSourceApplePayPaymentGatewayCaptureCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">CyberSource\ApplePay\Gateway\Request\CaptureRequest</argument>
+            <argument name="handler" xsi:type="object">CyberSource\ApplePay\Gateway\Response\CaptureResponseHandler</argument>
+            <argument name="transferFactory" xsi:type="object">CyberSource\ApplePay\Gateway\Http\TransferFactory</argument>
+            <argument name="validator" xsi:type="object">CyberSource\ApplePay\Gateway\Validator\ResponseCodeValidator</argument>
+            <argument name="client" xsi:type="object">CyberSource\ApplePay\Gateway\Http\Client\SOAPClient</argument>
+            <argument name="errorMessageMapper" xsi:type="object">CyberSource\Core\Gateway\ErrorMapper\ConfigurableMapper</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Capture Request -->
+    <type name="CyberSource\ApplePay\Gateway\Request\CaptureRequest">
+        <arguments>
+            <argument name="config" xsi:type="object">CyberSource\ApplePay\Gateway\Config\Config</argument>
+            <argument name="requestDataBuilder" xsi:type="object">CyberSourceApplePayHelperCaptureRequestDataBuilder</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="CyberSourceApplePayHelperCaptureRequestDataBuilder" type="CyberSource\ApplePay\Helper\RequestDataBuilder">
+        <arguments>
+            <argument name="orderItemsBuilder" xsi:type="object">CyberSourceCoreGatewaySoapCaptureItemsDataBuilder</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Sale command -->
+    <virtualType name="CyberSourceApplePaySaleCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">CyberSourceApplePaySaleRequest</argument>
+            <argument name="handler" xsi:type="object">CyberSource\ApplePay\Gateway\Response\SaleResponseHandler</argument>
+            <argument name="transferFactory" xsi:type="object">CyberSource\ApplePay\Gateway\Http\TransferFactory</argument>
+            <argument name="validator" xsi:type="object">CyberSource\ApplePay\Gateway\Validator\ResponseCodeValidator</argument>
+            <argument name="client" xsi:type="object">CyberSource\ApplePay\Gateway\Http\Client\SOAPClient</argument>
+            <argument name="errorMessageMapper" xsi:type="object">CyberSource\Core\Gateway\ErrorMapper\ConfigurableMapper</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Sale Request -->
+    <virtualType name="CyberSourceApplePaySaleRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="authorize" xsi:type="string">CyberSource\ApplePay\Gateway\Request\AuthorizeRequest</item>
+                <item name="settlement" xsi:type="string">CyberSource\ApplePay\Gateway\Request\SettlementRequest</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="CyberSource\ApplePay\Gateway\Request\SettlementRequest">
+        <arguments>
+            <argument name="config" xsi:type="object">CyberSource\ApplePay\Gateway\Config\Config</argument>
+        </arguments>
+    </type>
+
+    <!-- Void command -->
+    <virtualType name="CyberSourceApplePayPaymentGatewayVoidCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">CyberSource\ApplePay\Gateway\Request\VoidRequest</argument>
+            <argument name="handler" xsi:type="object">CyberSource\ApplePay\Gateway\Response\VoidResponseHandler</argument>
+            <argument name="transferFactory" xsi:type="object">CyberSource\ApplePay\Gateway\Http\TransferFactory</argument>
+            <argument name="validator" xsi:type="object">CyberSource\ApplePay\Gateway\Validator\ResponseCodeValidator</argument>
+            <argument name="client" xsi:type="object">CyberSource\ApplePay\Gateway\Http\Client\SOAPClient</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Void Request -->
+    <type name="CyberSource\ApplePay\Gateway\Request\VoidRequest">
+        <arguments>
+            <argument name="config" xsi:type="object">CyberSource\ApplePay\Gateway\Config\Config</argument>
+        </arguments>
+    </type>
+
+    <!-- Refund command -->
+    <virtualType name="CyberSourceApplePayPaymentGatewayRefundCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">CyberSource\ApplePay\Gateway\Request\RefundRequest</argument>
+            <argument name="handler" xsi:type="object">CyberSource\ApplePay\Gateway\Response\RefundResponseHandler</argument>
+            <argument name="transferFactory" xsi:type="object">CyberSource\ApplePay\Gateway\Http\TransferFactory</argument>
+            <argument name="validator" xsi:type="object">CyberSource\ApplePay\Gateway\Validator\ResponseCodeValidator</argument>
+            <argument name="client" xsi:type="object">CyberSource\ApplePay\Gateway\Http\Client\SOAPClient</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Refund Request -->
+    <type name="CyberSource\ApplePay\Gateway\Request\RefundRequest">
+        <arguments>
+            <argument name="config" xsi:type="object">CyberSource\ApplePay\Gateway\Config\Config</argument>
+            <argument name="requestDataBuilder" xsi:type="object">CyberSourceApplePayHelperRefundRequestDataBuilder</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="CyberSourceApplePayHelperRefundRequestDataBuilder" type="CyberSource\ApplePay\Helper\RequestDataBuilder">
+        <arguments>
+            <argument name="orderItemsBuilder" xsi:type="object">CyberSourceCoreGatewaySoapRefundItemsDataBuilder</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="CyberSourceApplePayValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">CyberSourceApplePayConfigValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="CyberSourceApplePayConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">CyberSource\ApplePay\Gateway\Config\Config</argument>
+        </arguments>
+    </virtualType>
+</config>

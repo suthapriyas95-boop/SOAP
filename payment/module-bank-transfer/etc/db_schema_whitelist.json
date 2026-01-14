@@ -1,0 +1,13 @@
+{
+    "cybersource_ideal_option": {
+        "column": {
+            "id": true,
+            "option_id": true,
+            "option_name": true,
+            "created_date": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

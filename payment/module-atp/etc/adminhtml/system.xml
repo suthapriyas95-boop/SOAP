@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="customer">
+            <group id="cybersource_atp" translate="label" type="text" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>Account Takeover Protection Service (Cybersource)</label>
+                <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <config_path>payment/chcybersource/atp_active</config_path>
+                </field>
+                <field id="internal_resolution" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <label>Use Internal Rejection Mechanism</label>
+                    <config_path>payment/chcybersource/atp_internal_resolution</config_path>
+                    <comment>You may disable this if you intend to customize the rejection workflow. Leave enabled
+                        if you are not doing this or you are unsure.</comment>
+                </field>
+                <field id="rejection_message" translate="label" type="textarea" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Rejection Mesasge</label>
+                    <config_path>payment/chcybersource/atp_rejection_message</config_path>
+                    <comment>Customize the rejection message.</comment>
+                </field>
+                <field id="action_on_error" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Action on Error</label>
+                    <source_model>CyberSource\Atp\Model\Source\Actions</source_model>
+                    <config_path>payment/chcybersource/atp_action_on_error</config_path>
+                    <comment>Specify the default action if an error occurs.</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

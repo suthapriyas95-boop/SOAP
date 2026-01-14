@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2018 CyberSource. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="payment_method_assign_data">
+        <observer name="sop_payment_gateway_data_assign" instance="CyberSource\SecureAcceptance\Observer\DataAssignObserver" />
+    </event>
+    <event name="sales_order_payment_capture">
+        <observer name="secure_acceptance_set_capture_item_list" instance="CyberSource\SecureAcceptance\Observer\PrepareCapture"/>
+    </event>
+</config>

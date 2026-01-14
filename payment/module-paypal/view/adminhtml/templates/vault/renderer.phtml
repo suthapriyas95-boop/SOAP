@@ -1,0 +1,29 @@
+<?php
+
+use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
+
+/** @var \Magento\Framework\View\Element\Template $block */
+
+$details = $block->getData(TokenUiComponentProviderInterface::COMPONENT_DETAILS);
+$hash = $block->getData(TokenUiComponentProviderInterface::COMPONENT_PUBLIC_HASH);
+$code = $block->getData('code');
+$id = $block->getData('id');
+$maskedToken = $block->getData('maskedToken');
+
+?>
+<div data-mage-init='{
+        "CyberSource_Core/js/vault": {
+            "container": "payment_<?= $escaper->escapeHtml($id) ?>",
+            "publicHash": "<?= $escaper->escapeHtml($hash) ?>",
+            "code": "<?= $escaper->escapeHtml($code) ?>"
+        }
+    }' id="payment_<?= $escaper->escapeHtml($id) ?>" class="admin__field">
+
+    <div class="admin__field-control control">
+        <input class="required-entry" type="radio" id="token_switcher_<?= $escaper->escapeHtml($id) ?>" name="payment[token_switcher]" disabled="disabled" />
+        <label for="token_switcher_<?= $escaper->escapeHtml($id) ?>">
+            <span><?= $escaper->escapeHtml($maskedToken) ?></span>
+            <span>(<?= $escaper->escapeHtml($details['email']) ?>)</span>
+        </label>
+    </div>
+</div>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright © 2021 CyberSource. All rights reserved.
+  ~ See accompanying LICENSE.txt for applicable terms of use and license.
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Cache/etc/cache.xsd">
+    <type name="cybersource_tax" translate="label,description" instance="CyberSource\Tax\Model\Cache\Type">
+        <label><![CDATA[CyberSource Tax Calculation Service]]></label>
+        <description><![CDATA[Tax rate cache]]></description>
+    </type>
+</config>

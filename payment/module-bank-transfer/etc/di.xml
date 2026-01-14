@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2018 CyberSource. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Configuration reader -->
+    <type name="CyberSource\BankTransfer\Model\Config">
+        <arguments>
+            <argument name="pathPattern" xsi:type="const">Magento\Payment\Gateway\Config\Config::DEFAULT_PATH_PATTERN</argument>
+            <argument name="methodCode" xsi:type="const">CyberSource\BankTransfer\Model\Ui\ConfigProvider::BANK_TRANSFER_CODE</argument>
+        </arguments>
+    </type>
+
+    <type name="CyberSource\BankTransfer\Controller\Index\Pay">
+        <arguments>
+            <argument name="gatewayAPI" xsi:type="array">
+                <item name="ideal" xsi:type="object">CyberSource\BankTransfer\Service\IdealSoap</item>
+                <item name="sofort" xsi:type="object">CyberSource\BankTransfer\Service\SofortSoap</item>
+                <item name="bancontact" xsi:type="object">CyberSource\BankTransfer\Service\BancontactSoap</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="CyberSource\BankTransfer\Model\Payment">
+        <arguments>
+            <argument name="gatewayAPI" xsi:type="array">
+                <item name="ideal" xsi:type="object">CyberSource\BankTransfer\Service\IdealSoap</item>
+                <item name="sofort" xsi:type="object">CyberSource\BankTransfer\Service\SofortSoap</item>
+                <item name="bancontact" xsi:type="object">CyberSource\BankTransfer\Service\BancontactSoap</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="CyberSource\BankTransfer\Cron\Status">
+        <arguments>
+            <argument name="gatewayAPI" xsi:type="array">
+                <item name="ideal" xsi:type="object">CyberSource\BankTransfer\Service\IdealSoap</item>
+                <item name="sofort" xsi:type="object">CyberSource\BankTransfer\Service\SofortSoap</item>
+                <item name="bancontact" xsi:type="object">CyberSource\BankTransfer\Service\BancontactSoap</item>
+            </argument>
+        </arguments>
+    </type>
+
+</config>

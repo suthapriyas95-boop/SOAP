@@ -1,0 +1,18 @@
+<?php
+/** @var \Magento\Payment\Block\Form $block */
+$cvvRequired = $block->getMethod()->getConfigData(\CyberSource\SecureAcceptance\Gateway\Config\Config::KEY_VAULT_ADMIN_ENABLE_CVV);
+?>
+
+<?php if ($cvvRequired) : ?>
+    <div class="field-number required admin__field _required">
+        <label class="admin__field-label" for="<?= /* @noEscape */ $block->getMethodCode() ?>_vault_cvv">
+            <span><?= $block->escapeHtml(__('Card Verification Number')) ?></span>
+        </label>
+        <div class="admin__field-control">
+            <input type="text" title="<?= $block->escapeHtml(__('Card Verification Number')) ?>"
+                   class="required-entry validate-number admin__control-cvn admin__control-text"
+                   id="<?= /* @noEscape */ $block->getMethodCode() ?>_vault_cvv"
+                   name="payment[vault_cvv]" value="" autocomplete="off" style="width: 6rem;" />
+        </div>
+    </div>
+<?php endif; ?>

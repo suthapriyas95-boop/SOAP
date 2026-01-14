@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+	<table name="cybersource_ideal_option" resource="default" engine="innodb" comment="IDEAL Option Table">
+		<column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="ID"/>
+		<column xsi:type="varchar" name="option_id" nullable="false" length="100" default="" comment="Option ID"/>
+		<column xsi:type="varchar" name="option_name" nullable="false" length="100" default="" comment="Option Name"/>
+		<column xsi:type="datetime" name="created_date" on_update="false" nullable="true" comment="Created Date"/>
+		<constraint xsi:type="primary" referenceId="PRIMARY">
+			<column name="id"/>
+		</constraint>
+	</table>
+</schema>

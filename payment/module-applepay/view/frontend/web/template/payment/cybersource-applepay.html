@@ -1,0 +1,80 @@
+<script>
+    if ( self === top ) {
+        document.documentElement.style.display = 'block';
+    }
+    else {
+        top.location = encodeURIComponent(self.location);
+    }
+</script>
+<div class="payment-method" data-bind="css: {'_active': (getCode() == isChecked())}">
+    <div class="payment-method-title field choice">
+        <input type="radio"
+               name="payment[method]"
+               class="radio"
+               data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
+        <label data-bind="attr: {'for': getCode()}" class="label"><span data-bind="text: getTitle()"></span></label>
+    </div>
+    <div class="payment-method-content">
+        <!-- ko foreach: getRegion('messages') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
+        <div class="payment-method-billing-address">
+            <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+        <div class="checkout-agreements-block">
+            <!-- ko foreach: $parent.getRegion('before-place-order') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+        <div class="actions-toolbar">
+            <style>
+            @supports (-webkit-appearance: -apple-pay-button) { 
+                .apple-pay-button {
+                    display: inline-block;
+                    -webkit-appearance: -apple-pay-button;
+                }
+                .apple-pay-button-black {
+                    -apple-pay-button-style: black;
+                }
+                .apple-pay-button-white {
+                    -apple-pay-button-style: white;
+                }
+
+                .apple-pay-button-white-with-line {
+                    -apple-pay-button-style: white-outline;
+                }
+            }
+            @supports not (-webkit-appearance: -apple-pay-button) {
+                .apple-pay-button {
+                    display: inline-block;
+                    background-size: 100% 60%;
+                    background-repeat: no-repeat;
+                    background-position: 50% 50%;
+                    border-radius: 5px;
+                    padding: 0px;
+                    box-sizing: border-box;
+                    min-width: 200px;
+                    min-height: 32px;
+                    max-height: 64px;
+                }
+                .apple-pay-button-black {
+                    background-image: -webkit-named-image(apple-pay-logo-white);
+                    background-color: black;
+                }
+                .apple-pay-button-white {
+                    background-image: -webkit-named-image(apple-pay-logo-black);
+                    background-color: white;
+                }
+                .apple-pay-button-white-with-line {
+                    background-image: -webkit-named-image(apple-pay-logo-black);
+                    background-color: white;
+                    border: .5px solid black;
+                } 
+            } 
+            </style>
+            <div class="apple-pay-button apple-pay-button-white" data-bind="click: applePayRequest"></div>
+        </div>
+    </div>
+</div>

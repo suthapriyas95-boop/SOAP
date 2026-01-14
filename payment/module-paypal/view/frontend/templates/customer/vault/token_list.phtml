@@ -1,0 +1,25 @@
+<?php
+
+/** @var \Magento\Vault\Block\Customer\AccountTokens $block */
+$tokens = $block->getPaymentTokens();
+?>
+<?php if (count($tokens) !== 0) : ?>
+    <div class="table-wrapper my-credit-cards">
+        <table class="data table table-credit-cards" id="token-list-table">
+            <thead>
+            <tr>
+                <th scope="col" class="col"><?= /* @noEscape */ __('Payment Gateway') ?></th>
+                <th scope="col" class="col"><?= /* @noEscape */ __('ID') ?></th>
+                <th scope="col" class="col"><?= /* @noEscape */ __('Payer Account') ?></th>
+                <th scope="col" class="col"><?= /* @noEscape */ __('Signed') ?></th>
+                <th scope="col" class="col actions">&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($tokens as $token) : ?>
+                <?= /* @noEscape */ $block->renderTokenHtml($token) ?>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php endif; ?>

@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <type name="Magento\Tax\Api\TaxCalculationInterface">
+        <plugin name="cybersource-tax-calculation-plugin" type="CyberSource\Tax\Plugin\Tax\Api\TaxCalculationInterfacePlugin"/>
+    </type>
+
+    <type name="Magento\Tax\Model\Sales\Total\Quote\CommonTaxCollector">
+        <plugin name="cybersource-common-tax-collector-plugin" type="CyberSource\Tax\Plugin\Tax\Model\Sales\Total\Quote\CommonTaxCollectorPlugin"/>
+    </type>
+
+    <type name="Magento\Tax\Model\Sales\Total\Quote\Tax">
+        <plugin sortOrder="1" name="cyberSourceTaxTax" type="CyberSource\Tax\Plugin\Tax\Model\Sales\Total\Quote\TaxPlugin"/>
+    </type>
+
+    <preference for="CyberSource\Tax\Service\TaxServiceInterface" type="CyberSource\Tax\Service\CachedTaxService"/>
+
+    <type name="CyberSource\Tax\Service\CachedTaxService">
+        <arguments>
+            <argument name="nonCachedTaxService" xsi:type="object">CyberSource\Tax\Service\CyberSourceSoapAPI</argument>
+        </arguments>
+    </type>
+
+    <!-- Tax logger configuration -->
+    <virtualType name="CyberSourceTaxLog" type="CyberSource\Core\Model\Logger">
+        <arguments>
+            <argument name="handlers"  xsi:type="array">
+                <item name="cybs" xsi:type="object">CyberSourceTaxLogHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="CyberSourceTaxLogHandler" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/cybs.tax.log</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Injecting logger -->
+    <type name="CyberSource\Tax\Service\CyberSourceSoapAPI">
+        <arguments>
+            <argument name="logger" xsi:type="object">CyberSourceTaxLog</argument>
+        </arguments>
+    </type>
+
+</config>
