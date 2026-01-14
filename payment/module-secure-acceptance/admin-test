@@ -1,0 +1,405 @@
+
+I'll conduct a comprehensive exploration of the entire MODULE-SECURE-ACCEPTANCE module to identify all admin order-related code.
+
+Now let me examine key admin-related configuration and plugin files:
+
+Now let me examine the layout files and system configuration:
+
+Let me check the plugin and observer files related to admin orders:
+
+Now let me check the vault plugin and continue reading DataAssignObserver:
+
+Let me explore the template files and check the rest of VaultPlugin:
+
+Let me check the admin template files for microform and payment forms:
+
+Now let me check the MethodForm.php and RequestDataBuilder to understand how admin forms are handled:
+
+Let me check more of the RequestDataBuilder to understand admin order flow:
+
+Perfect! Now let me check the Model/Ui files for admin UI component configuration:
+
+Let me check the JavaScript files for admin microform and SOP handling:
+
+Let me read the main JavaScript files for admin microform and SOP:
+
+Now let me create a comprehensive summary document. First, let me check the vault enabler and a few more configuration files:
+
+Perfect! Now let me read a bit more of the Config.php file to understand admin-related methods:
+
+Excellent! Now I have a comprehensive understanding. Let me create a detailed summary document:
+
+COMPREHENSIVE ADMIN ORDER CREATION ANALYSIS
+Based on my exploration of the MODULE-SECURE-ACCEPTANCE module, here's a complete overview of all admin order-related code:
+
+1. CORE CONTROLLERS (Order Processing)
+FlexPlaceOrder.php
+Purpose: Handles Microform Flex payment token submission and order creation in admin area
+
+Key Methods:
+
+execute() - Main action handler for order placement
+getErrorResponse() - Error response handler
+Workflow:
+
+Validates POST request and form key
+Retrieves backend session quote
+Processes Flex JWT token data:
+Extracts card number from JWT using JwtProcessor
+Sets additional payment info: flexJwt, transientToken, cardType, maskedPan
+Reserves order ID and saves quote
+Uses QuoteManagement::submit() to create order
+Returns JSON with redirect URL to order view page
+Key Constants:
+
+KEY_FLEX_TOKEN = 'token'
+KEY_CARD_TYPE = 'ccType'
+KEY_EXP_DATE = 'expDate'
+KEY_FLEX_MASKED_PAN = 'maskedPan'
+Response.php (SOP/Silent Order Post)
+Purpose: Processes CyberSource Secure Acceptance SOP payment response in admin
+
+Key Methods:
+
+execute() - Main response processor
+isValidSignature() - Validates CyberSource response signature
+substitutePostWithOrderData() - Replaces response POST with stored order data
+isResponseRedirect() - Determines response method
+Workflow:
+
+Receives transparent payment response from CyberSource
+Validates response signature against secret key
+Substitutes POST data with order data from backend session
+Configures AdminOrder\Create model with quote and payment method
+Handles gift messages if present
+Recollects cart totals and saves quote
+Registers response in core registry for validators
+Creates order via AdminOrder\Create::createOrder()
+Returns either redirect or iFrame response with success/error
+RequestSilentData.php
+Purpose: Generates silent order post (SOP) payment request data for admin orders
+
+Key Methods:
+
+execute() - Main action to build and return SOP request
+getErrorResponse() - Error handler
+Workflow:
+
+Validates form key and POST method
+Retrieves backend session quote
+Extracts parameters: cc_type, order_data, vault_enabled
+Reserves order ID
+Configures vault support if enabled in admin settings
+Builds SOP request fields via RequestDataBuilder::buildSilentRequestData()
+Returns JSON with payment fields or error
+TokenRequest.php
+Purpose: Generates Flex microform token for admin order creation
+
+Key Methods:
+
+execute() - Main token generation
+getErrorResponse() - Error handler
+Workflow:
+
+Validates form key and POST method
+Retrieves backend session quote
+Executes generate_flex_key command via CommandManager
+Reserves order ID
+Returns JSON containing:
+Flex token (capture context)
+Place order URL (chcybersource/microform/flexPlaceOrder)
+2. BLOCKS (UI Components)
+Flex.php
+Purpose: Provides Flex microform client library configuration for admin
+
+Key Methods:
+
+isSandbox() - Returns sandbox mode status
+getClientIntegrity() - Returns client library SRI value
+getClientLibrary() - Returns client library URL (sandbox)
+getProductionClientLibrary() - Returns production client library URL
+Workflow:
+
+Generates Flex token via TokenService::generateToken()
+Extracts clientLibrary and clientLibraryIntegrity from JWT
+Stores in quote extension attributes for template access
+Returns library URLs and integrity values to template
+Form.php
+Purpose: SOP transparent payment form block for admin
+
+Key Methods:
+
+_prepareLayout() - Prepares layout
+setMethod() - Sets payment method
+addSaveForLaterChild() - Adds vault save option child block
+Functionality: Extends Magento's transparent form with vault save-for-later option
+
+SaveForLater.php
+Purpose: Vault save-for-later option block for admin orders
+
+Key Methods:
+
+isAdminVaultEnabled() - Checks if vault is enabled for admin
+Functionality: Determines if save-for-later checkbox should display based on configuration
+
+3. SERVICES
+TokenService.php
+Purpose: Generates and manages Flex tokens specifically for admin orders
+
+Key Methods:
+
+generateToken() - Executes token generation and stores data
+Workflow:
+
+Retrieves backend session quote
+Checks if Microform is enabled
+Executes generate_flex_key command
+Decodes JWT response to extract:
+clientLibraryIntegrity - SRI integrity value
+clientLibrary - Library URL
+Stores extracted values in quote extension attributes
+Saves quote to database
+4. HELPERS
+RequestDataBuilder.php - Key Admin Methods
+Key Admin-Related Methods:
+
+buildSilentRequestData() - Builds SOP request with admin-specific fields
+buildRequestData() - Builds web form request
+Admin-Specific Logic:
+
+E-commerce Indicator: Sets e_commerce_indicator = 'moto' when no remote IP (admin transactions)
+CVV Handling: Line 221 - Checks both enable_cvv and enable_admin_cvv config
+Scope Field: Line 33 - Stores merchant_secure_data4 with scope (admin or frontend)
+Session Data: Encrypts session ID in merchant_secure_data2
+MethodForm.php
+Purpose: Determines payment form template based on payment method configuration
+
+Key Methods:
+
+getCCTemplateName() - Returns correct form template:
+Microform: microform.phtml
+SOP: sop.phtml
+Web form: CyberSource_SecureAcceptance::payment/wm.phtml
+getCCVaultTemplateName() - Returns vault form template
+5. OBSERVERS
+DataAssignObserver.php - Admin Order Support
+Purpose: Assigns payment data from admin forms to payment object
+
+Key Methods:
+
+execute() - Main observer
+assignMicroformData() - Processes Flex token data
+assignCardType() - Handles card type assignment
+assignCvv() - Processes CVV for vault and SOP
+assignCardExpirationDate() - Handles card expiration
+DI Configuration: Uses Magento\Backend\Model\Session\Quote for admin context
+
+6. PLUGINS
+RequestDataBuilderPlugin.php
+Purpose: Modifies SOP request parameters specifically for admin orders
+
+Key Methods:
+
+afterBuildSilentRequestData() - Post-processes SOP request
+afterBuildSilentData() - Similar processing for silent data
+Admin-Specific Modifications:
+
+Removes sensitive fields:
+device_fingerprint_id - Not applicable in admin
+customer_ip_address - Not applicable in admin
+Adds custom receipt page URL for admin order success
+Re-signs request with admin-specific scope (AREA_CODE)
+Sets scope to Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
+VaultPlugin.php
+Purpose: Controls vault method availability and form type in admin
+
+Key Methods:
+
+afterIsAvailable() - Checks if saved cards available for customer
+afterGetFormBlockType() - Sets vault form block class
+Admin Logic:
+
+Returns false if no payment tokens exist for customer
+Sets form block to CyberSource\SecureAcceptance\Block\Vault\Form
+7. CONFIGURATION FILES
+di.xml
+Key Configurations:
+
+Session Management:
+
+Admin-Specific Flags:
+
+Vault Configuration:
+
+routes.xml
+Routes (automatically created by Magento):
+
+/admin/chcybersource/microform/flexPlaceOrder - Flex order submission
+/admin/chcybersource/microform/tokenRequest - Flex token generation
+/admin/chcybersource/transparent/response - SOP response handler
+/admin/chcybersource/transparent/requestSilentData - SOP request builder
+system.xml
+Admin-Specific Settings (Lines 250-280):
+
+config.xml
+CSP (Content Security Policy) for Admin:
+
+8. LAYOUT FILES
+sales_order_create_index.xml
+Defines admin order creation page layout:
+
+Includes Flex microform CSS
+Adds Flex JavaScript configuration block
+Sets payment form templates for both regular and vault methods
+sales_order_create_load_block_billing_method.xml
+Similar configuration for dynamic billing method block loading
+
+9. TEMPLATES
+flexjs.phtml
+Dynamically loads Flex client library with SRI integrity:
+
+Reads clientLibraryUrl and integrityValue from block
+Creates script tag with integrity and crossOrigin attributes
+Configures RequireJS path for Flex microform module
+payment/microform.phtml
+Admin Microform payment form:
+
+Credit card type selector
+Card number input (managed by Flex microform)
+Expiration date selectors
+CVV input (if enabled)
+Data attributes for Flex initialization:
+data-mage-init with microform widget config
+orderSaveUrl - Points to FlexPlaceOrder controller
+cgiUrl - CyberSource CGI URL
+payment/sop.phtml
+Admin SOP payment form:
+
+Credit card type selector
+Card number input
+Expiration date selectors
+CVV input (if required)
+iFrame for payment gateway communication
+Data attributes for SOP widget config:
+orderSaveUrl - Points to RequestSilentData controller
+cgiUrl - CyberSource CGI URL
+Card field mappings
+payment/save_for_later.phtml
+Vault save checkbox for admin:
+
+Displays only if admin vault is enabled
+Checkbox name: payment[vault_is_enabled]
+vault/renderer.phtml
+Renders saved payment token:
+
+Card type and last 4 digits
+Options to use stored token or enter new card
+vault/cvn.phtml
+CVN input for stored cards:
+
+Displayed if admin CVV is enabled
+Name: vault_cvv
+10. JAVASCRIPT FILES
+js/microform.js
+Admin Microform widget extending $.mage.transparent:
+
+Key Features:
+
+Creates Flex microform instance
+Loads card number field into container
+Handles card type detection on number change
+Validates card data before submission
+Creates CVN field if required
+Submits token to FlexPlaceOrder controller
+Event Handlers:
+
+cardTypeChangeHandler() - Updates form based on card type
+validationChangeHandler() - Validates card data
+cardAutofillHandler() - Handles autocomplete
+js/sop.js
+Admin SOP widget extending $.mage.transparent:
+
+Key Features:
+
+Overrides _orderSave() to send AJAX request
+Sends card details to RequestSilentData controller
+Includes form serialization and vault enablement
+Processes payment gateway response
+Data Sent:
+
+js/flex/get-token.js
+Flex token retrieval:
+
+Makes AJAX call to TokenRequest controller
+Returns Flex token (capture context) and place order URL
+Handles success/error responses
+js/vault/enabler.js
+Vault checkbox detector:
+
+Reads vault enabled checkbox state
+Returns boolean for form submission
+js/cc-inputs-enabler.js
+Disables/enables credit card input fields:
+
+Used to prevent field modification during processing
+11. GATEWAY CONFIGURATION
+Config.php - Admin Methods
+Admin Detection:
+
+Vault Admin Support:
+
+Constants:
+
+KEY_VAULT_ADMIN_ENABLE = 'active_admin'
+KEY_VAULT_ADMIN_ENABLE_CVV = 'enable_admin_cvv'
+12. PAYMENT TOKEN MANAGEMENT
+TokenUiComponentProvider.php
+Provides UI component for saved payment tokens:
+
+Returns token details with last 4 digits and card type
+Uses template: renderer.phtml
+13. DATA FLOW SUMMARY
+Microform Admin Order Flow:
+Admin selects Microform payment method
+JavaScript calls TokenRequest → generates Flex token
+Flex library loads card number/CVV fields
+Admin enters card details in Flex fields
+JavaScript calls FlexPlaceOrder with:
+JWT token from Flex
+Card type, expiration date
+Order data (serialized order form)
+FlexPlaceOrder processes JWT, creates order, returns redirect URL
+Admin redirected to order view
+SOP Admin Order Flow:
+Admin selects SOP payment method
+JavaScript calls RequestSilentData with:
+Card type
+Order data (serialized)
+Vault enablement
+RequestSilentData builds SOP request with signature
+SOP iFrame submits to CyberSource
+CyberSource redirects back to Response controller
+Response validates signature, creates order
+Admin redirected to order view
+Vault Admin Order Flow:
+Admin selects saved card
+CVV input shown if enabled
+Regular payment processing applies
+Payment token used instead of new card data
+14. KEY CONFIGURATION KEYS
+15. SECURITY FEATURES
+Form Key Validation - All admin actions validate FORM_KEY
+Signature Validation - SOP responses validated with secret key
+Session Encryption - Session ID encrypted in request
+Token Isolation - JWT tokens used instead of raw card data
+CSRF Protection - Backend session management
+Scope Tracking - Tracks admin vs. frontend for different processing
+
+payment/chcybersource/enable_admin_vault       - Enable vault for admin
+payment/chcybersource/enable_admin_cvv         - Require CVV for vault cards
+payment/chcybersource/enable_cvv               - Require CVV (frontend)
+payment/chcybersource/ignore_avs               - Ignore AVS response
+payment/chcybersource/ignore_cvn               - Ignore CVN response
+payment/chcybersource/vault_active_admin       - Vault method active in admin
+chcybersource_cc_vault                         - Vault payment method code
+chcybersource                                  - Main payment method code
