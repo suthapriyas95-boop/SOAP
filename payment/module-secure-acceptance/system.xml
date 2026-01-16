@@ -1,0 +1,32 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+            <group id="cybersource_section" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                <group id="cybersource_secure_acceptance" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <group id="cybersource_vault" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Save Card for Later Service</label>
+                        <depends><field id="active">1</field></depends>
+                        <field id="enable_admin_vault" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Save Card for Later for Admin orders</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/chcybersource_cc_vault/active_admin</config_path>
+                            <depends>
+                                <field id="chcybersource_cc_vault_active">1</field>
+                            </depends>
+                            <comment>Enables storing card details for orders placed in the admin area</comment>
+                        </field>
+                        <field id="enable_admin_cvv" translate="label" type="select" sortOrder="185" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Use CVV for Saved Credit Cards in Admin</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/chcybersource_cc_vault/enable_admin_cvv</config_path>
+                            <depends>
+                                <field id="chcybersource_cc_vault_active">1</field>
+                                <field id="enable_admin_vault">1</field>
+                            </depends>
+                        </field>
+                    </group>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>
