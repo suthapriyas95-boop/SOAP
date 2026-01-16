@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- REST API Controllers -->
+    <preference for="CyberSource\Payment\Controller\Rest\Admin\Token\Generate" type="CyberSource\Payment\Controller\Rest\Admin\Token\Generate" />
+    <preference for="CyberSource\Payment\Controller\Rest\Admin\Sop\RequestData" type="CyberSource\Payment\Controller\Rest\Admin\Sop\RequestData" />
+    <preference for="CyberSource\Payment\Controller\Rest\Admin\Sop\Response" type="CyberSource\Payment\Controller\Rest\Admin\Sop\Response" />
+    <preference for="CyberSource\Payment\Controller\Rest\Admin\Flex\PlaceOrder" type="CyberSource\Payment\Controller\Rest\Admin\Flex\PlaceOrder" />
+    <preference for="CyberSource\Payment\Controller\Rest\Admin\Payment\Authorize" type="CyberSource\Payment\Controller\Rest\Admin\Payment\Authorize" />
+    <preference for="CyberSource\Payment\Controller\Rest\Admin\Payment\Sale" type="CyberSource\Payment\Controller\Rest\Admin\Payment\Sale" />
+    <preference for="CyberSource\Payment\Controller\Rest\Admin\Payment\Capture" type="CyberSource\Payment\Controller\Rest\Admin\Payment\Capture" />
+    <preference for="CyberSource\Payment\Controller\Rest\Admin\Payment\Void" type="CyberSource\Payment\Controller\Rest\Admin\Payment\Void" />
+    <preference for="CyberSource\Payment\Controller\Rest\Admin\Payment\Refund" type="CyberSource\Payment\Controller\Rest\Admin\Payment\Refund" />
+</config>
