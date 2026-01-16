@@ -1,0 +1,25 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <csp>
+            <mode>
+                <admin_sales_order_create_index>
+                    <report_only>1</report_only>
+                </admin_sales_order_create_index>
+            </mode>
+            <policies>
+                <admin_sales_order_create_index>
+                    <scripts>
+                        <inline>1</inline>
+                    </scripts>
+                </admin_sales_order_create_index>
+            </policies>
+        </csp>
+        <payment>
+            <chcybersource_cc_vault>
+                <model>CyberSourceSACreditCardVaultFacade</model>
+                <title>CyberSource Stored Cards</title>
+                <can_use_internal>1</can_use_internal>
+            </chcybersource_cc_vault>
+        </payment>
+    </default>
+</config>
