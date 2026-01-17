@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <!-- Token Generation -->
+    <route url="/V1/cybersource/admin/token/generate" method="POST">
+        <service class="CyberSource\Payment\Controller\Rest\Admin\Token\Generate" method="execute"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+
+    <!-- SOP Request Data -->
+    <route url="/V1/cybersource/admin/sop/request-data" method="POST">
+        <service class="CyberSource\Payment\Controller\Rest\Admin\Sop\RequestData" method="execute"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+
+    <!-- SOP Response Handler -->
+    <route url="/V1/cybersource/admin/sop/response" method="POST">
+        <service class="CyberSource\Payment\Controller\Rest\Admin\Sop\Response" method="execute"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+
+    <!-- Flex Place Order -->
+    <route url="/V1/cybersource/admin/flex/place-order" method="POST">
+        <service class="CyberSource\Payment\Controller\Rest\Admin\Flex\PlaceOrder" method="execute"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+
+    <!-- Payment Operations -->
+    <route url="/V1/cybersource/admin/payment/authorize" method="POST">
+        <service class="CyberSource\Payment\Controller\Rest\Admin\Payment\Authorize" method="execute"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+
+    <route url="/V1/cybersource/admin/payment/sale" method="POST">
+        <service class="CyberSource\Payment\Controller\Rest\Admin\Payment\Sale" method="execute"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+
+    <route url="/V1/cybersource/admin/payment/capture" method="POST">
+        <service class="CyberSource\Payment\Controller\Rest\Admin\Payment\Capture" method="execute"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+
+    <route url="/V1/cybersource/admin/payment/void" method="POST">
+        <service class="CyberSource\Payment\Controller\Rest\Admin\Payment\Void" method="execute"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+
+    <route url="/V1/cybersource/admin/payment/refund" method="POST">
+        <service class="CyberSource\Payment\Controller\Rest\Admin\Payment\Refund" method="execute"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+</routes>

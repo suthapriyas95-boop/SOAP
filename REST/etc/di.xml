@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- API Interface Implementations -->
+    <preference for="CyberSource\Payment\Api\Admin\TokenGeneratorInterface" type="CyberSource\Payment\Model\Api\AdminTokenGenerator" />
+    <preference for="CyberSource\Payment\Api\Admin\SopRequestDataBuilderInterface" type="CyberSource\Payment\Model\Api\AdminSopRequestDataBuilder" />
+    <preference for="CyberSource\Payment\Api\Admin\SopResponseHandlerInterface" type="CyberSource\Payment\Model\Api\AdminSopResponseHandler" />
+    <preference for="CyberSource\Payment\Api\Admin\FlexOrderCreatorInterface" type="CyberSource\Payment\Model\Api\AdminFlexOrderCreator" />
+    <preference for="CyberSource\Payment\Api\Admin\PaymentProcessorInterface" type="CyberSource\Payment\Model\Api\AdminPaymentProcessor" />
+    <preference for="CyberSource\Payment\Api\Admin\Vault\TokenManagerInterface" type="CyberSource\Payment\Model\Api\Vault\TokenManager" />
+
+    <!-- Gateway Command -->
+    <preference for="CyberSource\Payment\Gateway\Command\GatewayCommand" type="CyberSource\Payment\Gateway\Command\RestGatewayCommand" />
+
+    <!-- Gateway Request Builders -->
+    <preference for="CyberSource\Payment\Gateway\Request\Rest\AuthorizeRequest" type="CyberSource\Payment\Gateway\Request\Rest\AuthorizeRequest" />
+    <preference for="CyberSource\Payment\Gateway\Request\Rest\SaleRequest" type="CyberSource\Payment\Gateway\Request\Rest\SaleRequest" />
+    <preference for="CyberSource\Payment\Gateway\Request\Rest\CaptureRequest" type="CyberSource\Payment\Gateway\Request\Rest\CaptureRequest" />
+    <preference for="CyberSource\Payment\Gateway\Request\Rest\VoidRequest" type="CyberSource\Payment\Gateway\Request\Rest\VoidRequest" />
+    <preference for="CyberSource\Payment\Gateway\Request\Rest\RefundRequest" type="CyberSource\Payment\Gateway\Request\Rest\RefundRequest" />
+
+    <!-- Gateway Response Handlers -->
+    <preference for="CyberSource\Payment\Gateway\Response\Rest\AuthorizeResponse" type="CyberSource\Payment\Gateway\Response\Rest\AuthorizeResponse" />
+    <preference for="CyberSource\Payment\Gateway\Response\Rest\SaleResponse" type="CyberSource\Payment\Gateway\Response\Rest\SaleResponse" />
+    <preference for="CyberSource\Payment\Gateway\Response\Rest\CaptureResponse" type="CyberSource\Payment\Gateway\Response\Rest\CaptureResponse" />
+    <preference for="CyberSource\Payment\Gateway\Response\Rest\VoidResponse" type="CyberSource\Payment\Gateway\Response\Rest\VoidResponse" />
+    <preference for="CyberSource\Payment\Gateway\Response\Rest\RefundResponse" type="CyberSource\Payment\Gateway\Response\Rest\RefundResponse" />
+</config>
